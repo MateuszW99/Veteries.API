@@ -11,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Veteries.API.Extensions;
 
 namespace Veteries.API
 {
@@ -31,7 +32,13 @@ namespace Veteries.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddVeteriesSwagger(Configuration);
         }
+
+        //public void ConfigureContainer(ContainerBuilder builder)
+        //{
+            
+        //}
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -42,15 +49,15 @@ namespace Veteries.API
             }
 
             app.UseHttpsRedirection();
-
             app.UseRouting();
-
             app.UseAuthorization();
-
+            app.UseAuthentication();
+            app.UseCors("default");
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
+            app.UseVeteriesSwagger(Configuration);
         }
     }
 }
