@@ -33,6 +33,7 @@ namespace Veteries.API
         {
             services.AddControllers();
             services.AddVeteriesSwagger(Configuration);
+            services.AddJwtAuthentication(Configuration);
         }
 
         //public void ConfigureContainer(ContainerBuilder builder)

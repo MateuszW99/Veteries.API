@@ -1,8 +1,12 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
+using System.Text;
 
 namespace Veteries.API.Extensions
 {
@@ -41,6 +45,31 @@ namespace Veteries.API.Extensions
 
                 c.CustomSchemaIds(x => x.FullName);
             });
+        }
+
+        public static void AddJwtAuthentication(this IServiceCollection services, IConfiguration configuration)
+        {
+            var key = Encoding.UTF8.GetBytes(configuration.GetSection("AppSettings").GetSection("Secret").Value);
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        ValidIssuer = configuration.GetSection("AppSettings").GetSection("ValidIssuer").Value,
+                        ValidAudience = configuration.GetSection("AppSettings").GetSection("ValidAudience").Value,
+                        IssuerSigningKey = new SymmetricSecurityKey(key)
+                    };
+                });
         }
 
         public static void UseVeteriesSwagger(this IApplicationBuilder app, IConfiguration configuration)
