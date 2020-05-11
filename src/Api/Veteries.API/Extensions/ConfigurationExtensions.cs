@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Persistence.Domain;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
@@ -45,6 +47,12 @@ namespace Veteries.API.Extensions
 
                 c.CustomSchemaIds(x => x.FullName);
             });
+        }
+
+        public static void AddDatabseContext(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddDbContextPool<DomainDbContext>(options =>
+                options.UseSqlServer(configuration.GetConnectionString("DomainDbContext")));
         }
 
         public static void AddJwtAuthentication(this IServiceCollection services, IConfiguration configuration)
