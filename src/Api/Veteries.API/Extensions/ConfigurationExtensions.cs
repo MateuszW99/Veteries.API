@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Domain.Entities;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -54,6 +56,21 @@ namespace Veteries.API.Extensions
             services.AddDbContextPool<DomainDbContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("DomainDbContext")));
         }
+
+        public static void AddApiIdentity(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddIdentity<ApplicationUser, IdentityRole>(o =>
+            {
+                o.Password.RequireDigit = true;
+                o.Password.RequiredLength = 8;
+                o.Password.RequireLowercase = true;
+                o.Password.RequireUppercase = false;
+                o.Password.RequireNonAlphanumeric = false;
+            }).AddRoles<IdentityRole>()
+            .AddEntityFrameworkStores<DomainDbContext>()
+            .AddDefaultTokenProviders();
+        }
+
 
         public static void AddJwtAuthentication(this IServiceCollection services, IConfiguration configuration)
         {

@@ -1,6 +1,11 @@
-﻿namespace Persistence
+﻿using Autofac;
+
+namespace Persistence
 {
-    class DependencyInjection
+    public class DependencyInjection : Module
     {
+        protected override void Load(ContainerBuilder builder)
+        {            
+        }
     }
 }

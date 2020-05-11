@@ -35,11 +35,12 @@ namespace Veteries.API
             services.AddVeteriesSwagger(Configuration);
             services.AddJwtAuthentication(Configuration);
             services.AddDatabseContext(Configuration);
+            services.AddApiIdentity(Configuration);
         }
 
         //public void ConfigureContainer(ContainerBuilder builder)
         //{
-            
+        //    builder.RegisterModule(new Persistence.DependencyInjection());
         //}
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
