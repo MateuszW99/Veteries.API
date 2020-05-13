@@ -1,16 +1,15 @@
 ﻿using Autofac;
 using FluentValidation;
 using MediatR;
-using System;
-using System.Collections.Generic;
 using System.Reflection;
-using System.Text;
+using User.Abstractions;
+using User.Abstractions.Internals;
 
 namespace User
 {
-    class DependencyInjection : Module
+    public class DependencyInjection : Autofac.Module
     {
-        protected override Load(ContainerBuilder builder)
+        protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterAssemblyTypes(typeof(DependencyInjection).GetTypeInfo().Assembly)
                 .AsClosedTypesOf(typeof(IRequestHandler<,>));
