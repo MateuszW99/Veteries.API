@@ -24,5 +24,13 @@ namespace Veteries.API.Controllers
             return Ok();
         }
 
+        [HttpPost]
+        [Route("authenticate")]
+        public async Task<IActionResult> Authenticate([FromBody] AuthenticateUser.Command command)
+        {
+            var result = await _mediator.Send(command);
+            return Ok(result);
+        }
+
     }
 }

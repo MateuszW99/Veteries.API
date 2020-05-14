@@ -11,6 +11,8 @@ namespace Persistence.Domain
         {
         }
 
+        public DbSet<Token> RefreshTokens { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
