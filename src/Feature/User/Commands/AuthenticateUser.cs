@@ -31,6 +31,8 @@ namespace User.Commands
         {
             public string Token { get; set; }
             public string RefreshToken { get; set; }
+            public bool Success { get; set; }
+            public IEnumerable<string> ErrorMessages { get; set; }
         }
 
         public class Validator : AbstractValidator<Command>
@@ -123,12 +125,17 @@ namespace User.Commands
 
                     return new Result
                     {
+                        Success = true,
                         Token = new JwtSecurityTokenHandler().WriteToken(tokenOptions),
                         RefreshToken = refreshToken
                     };
                 }
 
-                throw new Exception("Unauthorized");
+                return new Result
+                {
+                    Success = false,
+                    ErrorMessages = new[] { "Unauthorized" }
+                };
             }
         }
     }

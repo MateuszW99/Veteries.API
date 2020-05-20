@@ -20,8 +20,8 @@ namespace Veteries.API.Controllers
         [Route("register")]
         public async Task<IActionResult> Register([FromBody] RegisterUser.Command command)
         {
-            await _mediator.Send(command);
-            return Ok();
+            var result = await _mediator.Send(command);
+            return Ok(result);
         }
 
         [HttpPost]

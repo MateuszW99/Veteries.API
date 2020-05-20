@@ -12,6 +12,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Models.Helpers;
 using Veteries.API.Extensions;
 
 namespace Veteries.API
@@ -32,6 +33,8 @@ namespace Veteries.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var appSettingsSection = Configuration.GetSection("AppSettings");
+            services.Configure<AppSettings>(appSettingsSection);
             services.AddControllers();
             services.AddVeteriesSwagger(Configuration);
             services.AddJwtAuthentication(Configuration);
@@ -42,7 +45,7 @@ namespace Veteries.API
         public void ConfigureContainer(ContainerBuilder builder)
         {
             builder.RegisterModule(new Application.DependencyInjection());
-            //builder.RegisterModule(new Persistence.DependencyInjection());
+            builder.RegisterModule(new Persistence.DependencyInjection());
             builder.RegisterModule(new User.DependencyInjection());
         }
 
