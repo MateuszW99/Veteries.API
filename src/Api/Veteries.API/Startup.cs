@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Autofac;
+using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -11,6 +12,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Models.Helpers;
 using Veteries.API.Extensions;
 
 namespace Veteries.API
@@ -31,6 +33,8 @@ namespace Veteries.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var appSettingsSection = Configuration.GetSection("AppSettings");
+            services.Configure<AppSettings>(appSettingsSection);
             services.AddControllers();
             services.AddVeteriesSwagger(Configuration);
             services.AddJwtAuthentication(Configuration);
@@ -38,14 +42,18 @@ namespace Veteries.API
             services.AddApiIdentity(Configuration);
         }
 
-        //public void ConfigureContainer(ContainerBuilder builder)
-        //{
-        //    builder.RegisterModule(new Persistence.DependencyInjection());
-        //}
+        public void ConfigureContainer(ContainerBuilder builder)
+        {
+            builder.RegisterModule(new Application.DependencyInjection());
+            builder.RegisterModule(new Persistence.DependencyInjection());
+            builder.RegisterModule(new User.DependencyInjection());
+        }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            this.AutofacContainer = app.ApplicationServices.GetAutofacRoot();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
