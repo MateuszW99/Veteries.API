@@ -99,6 +99,11 @@ namespace User.Commands
                     };
                 }
 
+                return GenerateAuthenticationResult(user);
+            }
+
+            private Result GenerateAuthenticationResult(ApplicationUser user)
+            {
                 var tokenHandler = new JwtSecurityTokenHandler();
                 var key = Encoding.UTF8.GetBytes(_appSettings.Secret);
                 var tokenDescriptor = new SecurityTokenDescriptor
