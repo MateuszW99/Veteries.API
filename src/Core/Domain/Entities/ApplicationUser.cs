@@ -7,7 +7,6 @@ namespace Domain.Entities
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public ICollection<Pet> Pets { get; set; }
         public List<Token> refreshTokens = new List<Token>();
     }
 }

@@ -7,10 +7,12 @@ namespace Domain.Entities
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public string Species { get; set; }
         public int Age { get; set; }
-        public ICollection<string> AppointmentsHistory { get; set; }
 
-        public int OwnerId { get; set; }
+        public ICollection<Appointment> Appointments { get; set; }
+
+        public string OwnerId { get; set; }
         [ForeignKey("OwnerId")] 
         public virtual ApplicationUser Owner { get; set; }
     }

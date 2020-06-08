@@ -12,7 +12,5 @@ namespace Domain.Entities
         public string AddressLineTwo { get; set; }
         public string City { get; set; }
         public string ZipCode { get; set; }
-
-        public ICollection<VetUser> Vets { get; set; }
     }
 }
