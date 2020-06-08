@@ -11,6 +11,7 @@ using Persistence.Domain;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
+using FluentValidation.AspNetCore;
 
 namespace Veteries.API.Extensions
 {
