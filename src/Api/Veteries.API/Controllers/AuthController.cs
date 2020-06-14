@@ -21,6 +21,10 @@ namespace Veteries.API.Controllers
         public async Task<IActionResult> Register([FromBody] RegisterUser.Command command)
         {
             var result = await _mediator.Send(command);
+            if (!result.Success)
+            {
+                return BadRequest(result);
+            }
             return Ok(result);
         }
 
@@ -29,6 +33,10 @@ namespace Veteries.API.Controllers
         public async Task<IActionResult> Authenticate([FromBody] AuthenticateUser.Command command)
         {
             var result = await _mediator.Send(command);
+            if (!result.Success)
+            {
+                return BadRequest(result);
+            }
             return Ok(result);
         }
 

@@ -71,12 +71,12 @@ namespace User.Commands
             {
                 var checkoutUserEmail = await _userManager.FindByEmailAsync(request.Email);
 
-                // the user exists
+                // the user already exists
                 if (checkoutUserEmail != null)
                 {
                     return new Result
                     {
-                         Success = false,
+                        Success = false,
                         ErrorMessages = new[] { "This email address is already registered" }
                     };
                 };
@@ -94,10 +94,16 @@ namespace User.Commands
                 {
                     return new Result
                     {
+                        Success = false,
                         ErrorMessages = result.Errors.Select(x => x.ToString())
                     };
                 }
 
+                return GenerateAuthenticationResult(user);
+            }
+
+            private Result GenerateAuthenticationResult(ApplicationUser user)
+            {
                 var tokenHandler = new JwtSecurityTokenHandler();
                 var key = Encoding.UTF8.GetBytes(_appSettings.Secret);
                 var tokenDescriptor = new SecurityTokenDescriptor
@@ -108,7 +114,7 @@ namespace User.Commands
                         new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                         new Claim(JwtRegisteredClaimNames.Email, user.Email),
                         new Claim("id", user.Id)
-                }),
+                    }),
                     Expires = DateTime.UtcNow.AddHours(1),
                     Issuer = _appSettings.ValidIssuer,
                     Audience = _appSettings.ValidAudience,
