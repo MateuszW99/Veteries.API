@@ -83,7 +83,6 @@ namespace User.Commands
                 }
 
                 //var userHasValidPassword = await _userManager.CheckPasswordAsync(user, request.Password);
-
                 //if (!userHasValidPassword)
                 //{
                 //    return new Result
