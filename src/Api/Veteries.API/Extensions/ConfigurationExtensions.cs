@@ -77,25 +77,31 @@ namespace Veteries.API.Extensions
         {
             var key = Encoding.UTF8.GetBytes(configuration.GetSection("AppSettings").GetSection("Secret").Value);
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+
+            var tokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true,
+                ValidIssuer = configuration.GetSection("AppSettings").GetSection("ValidIssuer").Value,
+                ValidAudience = configuration.GetSection("AppSettings").GetSection("ValidAudience").Value,
+                IssuerSigningKey = new SymmetricSecurityKey(key)
+            };
+
+            services.AddSingleton(tokenValidationParameters);
+
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             })
-                .AddJwtBearer(options =>
-                {
-                    options.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateIssuer = true,
-                        ValidateAudience = true,
-                        ValidateLifetime = true,
-                        ValidateIssuerSigningKey = true,
-                        ValidIssuer = configuration.GetSection("AppSettings").GetSection("ValidIssuer").Value,
-                        ValidAudience = configuration.GetSection("AppSettings").GetSection("ValidAudience").Value,
-                        IssuerSigningKey = new SymmetricSecurityKey(key)
-                    };
-                });
+            .AddJwtBearer(options =>
+            {
+                options.SaveToken = true;
+                options.TokenValidationParameters = tokenValidationParameters;
+            });
         }
 
         public static void UseVeteriesSwagger(this IApplicationBuilder app, IConfiguration configuration)

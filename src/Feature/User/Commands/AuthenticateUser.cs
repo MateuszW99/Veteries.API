@@ -108,7 +108,7 @@ namespace User.Commands
                         new Claim(JwtRegisteredClaimNames.Email, user.Email),
                         new Claim("id", user.Id)
                     }),
-                    Expires = DateTime.UtcNow.AddHours(1),
+                    Expires = DateTime.UtcNow.AddHours(_appSettings.TokenLifetime),
                     Issuer = _appSettings.ValidIssuer,
                     Audience = _appSettings.ValidAudience,
                     SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
