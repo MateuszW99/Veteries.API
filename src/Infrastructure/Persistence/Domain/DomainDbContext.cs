@@ -11,7 +11,7 @@ namespace Persistence.Domain
         {
         }
 
-        public DbSet<Token> RefreshTokens { get; set; }
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
         public DbSet<Appointment> Appointments { get; set; }
         public DbSet<Pet> Pets { get; set; }
         public DbSet<Office> Offices { get; set; }
