@@ -25,6 +25,7 @@ namespace Veteries.API.Controllers
             {
                 return BadRequest(result);
             }
+
             return Ok(result);
         }
 
@@ -37,8 +38,21 @@ namespace Veteries.API.Controllers
             {
                 return BadRequest(result);
             }
+
             return Ok(result);
         }
 
+        [HttpPost]
+        [Route("refresh")]
+        public async Task<IActionResult> Refresh([FromBody] RefreshToken.Command command)
+        {
+            var result = await _mediator.Send(command);
+            if (!result.Success)
+            {
+                return BadRequest(result);
+            }
+
+            return Ok(result);
+        }
     }
 }
