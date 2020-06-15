@@ -56,14 +56,15 @@ namespace User.Commands
             private readonly ITokenService _tokenService;
             private readonly UserManager<ApplicationUser> _userManager;
             private readonly AppSettings _appSettings;
-            private readonly DomainDbContext _dbContext;
+            private readonly DomainDbContext _context;
+
 
             public Handler(ITokenService tokenService,
                 UserManager<ApplicationUser> userManager,
                 IOptions<AppSettings> appSettings,
-                DomainDbContext dbContext)
+                DomainDbContext context)
             {
-                _dbContext = dbContext;
+                _context = context;
                 _tokenService = tokenService;
                 _userManager = userManager;
                 _appSettings = appSettings.Value;
@@ -108,7 +109,7 @@ namespace User.Commands
                         new Claim(JwtRegisteredClaimNames.Email, user.Email),
                         new Claim("id", user.Id)
                     }),
-                    Expires = DateTime.UtcNow.AddHours(1),
+                    Expires = DateTime.UtcNow.Add(_appSettings.TokenLifetime),
                     Issuer = _appSettings.ValidIssuer,
                     Audience = _appSettings.ValidAudience,
                     SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
@@ -116,10 +117,22 @@ namespace User.Commands
 
                 var token = tokenHandler.CreateToken(tokenDescriptor);
 
+                var refreshToken = new Domain.Entities.RefreshToken()
+                {
+                    JwtId = token.Id,
+                    UserId = user.Id,
+                    CreationDate = DateTime.UtcNow,
+                    ExpiryDate = DateTime.UtcNow.AddMonths(6)
+                };
+
+                await _context.RefreshTokens.AddAsync(refreshToken);
+                await _context.SaveChangesAsync();
+
                 return new Result
                 {
                     Success = true,
-                    Token = tokenHandler.WriteToken(token)
+                    Token = tokenHandler.WriteToken(token),
+                    RefreshToken = refreshToken.Token
                 };
             }
         }
