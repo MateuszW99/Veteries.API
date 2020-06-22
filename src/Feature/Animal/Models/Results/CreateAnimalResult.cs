@@ -2,7 +2,7 @@
 
 namespace Animal.Models.Results
 {
-    public class AddAnimalResult : IAnimalResult
+    public class CreateAnimalResult : IAnimalResult
     {
         public Pet Pet { get; set; }
         public bool Success { get; set; }
