@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Animal.Models.Commands;
 using Animal.Models.Results;
 using Domain.Entities;
+using FluentValidation;
 using MediatR;
 using Persistence.Domain;
 
@@ -10,6 +11,39 @@ namespace Animal.Handlers
 {
     public class CreateAnimalHandler : IRequestHandler<CreateAnimalCommand, CreateAnimalResult>
     {
+        public class Validator : AbstractValidator<CreateAnimalCommand>
+        {
+            public Validator()
+            {
+                //this.RuleFor(x => x.Pet)
+                //    .NotNull()
+                //    .NotEmpty();
+
+                //this.RuleFor(x => x.Pet.Name)
+                //    .NotNull()
+                //    .Length(2, 20);
+
+                //this.RuleFor(x => x.Pet.Age)
+                //    .GreaterThan(0);
+
+                //this.RuleFor(x => x.Pet.Species)
+                //    .NotNull()
+                //    .Length(3, 20);
+
+                this.RuleFor(x => x.Name)
+                    .NotNull()
+                    .Length(2, 20);
+
+                this.RuleFor(x => x.Species)
+                    .NotNull()
+                    .Length(2, 20);
+
+
+                this.RuleFor(x => x.Age)
+                    .GreaterThan(0);
+            }
+        }
+
         private readonly DomainDbContext _context;
 
         public CreateAnimalHandler(DomainDbContext context)
