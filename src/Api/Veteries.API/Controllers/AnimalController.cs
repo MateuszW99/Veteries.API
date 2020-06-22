@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Animal.Models.Commands;
+using Animal.Models.Results;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -36,6 +37,22 @@ namespace Veteries.API.Controllers
         {
             var result = await _mediator.Send(new GetAllAnimalsCommand());
             return Ok(result.Pets);
+        }
+
+        [HttpGet]
+        [Route("animal/{id}")]
+        public async Task<IActionResult> Animal(int id)
+        {
+            var command = new GetAnimalCommand() {Id = id};
+
+            GetAnimalResult result = await _mediator.Send(command);
+
+            if (!result.Success)
+            {
+                return BadRequest();
+            }
+
+            return Ok(result.Pet);
         }
     }
 }
