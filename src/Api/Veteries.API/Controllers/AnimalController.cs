@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using Animal.Models.Commands;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Veteries.API.Controllers
@@ -10,5 +9,23 @@ namespace Veteries.API.Controllers
     [ApiController]
     public class AnimalController : ControllerBase
     {
+        private readonly IMediator _mediator;
+
+        public AnimalController(IMediator mediator)
+        {
+            _mediator = mediator;
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Pet([FromBody] AddAnimalCommand command)
+        {
+            var result = await _mediator.Send(command);
+            if (!result.Success)
+            {
+                return BadRequest(result);
+            }
+
+            return Ok(result);
+        }
     }
 }

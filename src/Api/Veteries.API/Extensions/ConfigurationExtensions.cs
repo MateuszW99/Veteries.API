@@ -52,7 +52,7 @@ namespace Veteries.API.Extensions
             });
         }
 
-        public static void AddDatabseContext(this IServiceCollection services, IConfiguration configuration)
+        public static void AddDatabaseContext(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddDbContextPool<DomainDbContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("DomainDbContext")));
