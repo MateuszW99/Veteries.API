@@ -17,15 +17,25 @@ namespace Veteries.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Pet([FromBody] AddAnimalCommand command)
+        [Route("animal")]
+        public async Task<IActionResult> Animal([FromBody] CreateAnimalCommand command)
         {
             var result = await _mediator.Send(command);
+
             if (!result.Success)
             {
                 return BadRequest(result);
             }
 
-            return Ok(result);
+            return Ok(result.Pet);
+        }
+
+        [HttpGet]
+        [Route("animals")]
+        public async Task<IActionResult> Animals()
+        {
+            var result = await _mediator.Send(new GetAllAnimalsCommand());
+            return Ok(result.Pets);
         }
     }
 }
