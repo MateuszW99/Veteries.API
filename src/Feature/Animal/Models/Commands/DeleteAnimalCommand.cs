@@ -3,7 +3,7 @@ using MediatR;
 
 namespace Animal.Models.Commands
 {
-    public class DeleteAnimalCommand : IRequest<DeleteAnimalResult>, IRequest<DeleteAnimalResult>
+    public class DeleteAnimalCommand : IRequest<DeleteAnimalResult>
     {
         public int Id { get; set; }
     }

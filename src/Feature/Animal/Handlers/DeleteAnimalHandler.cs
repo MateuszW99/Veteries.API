@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
+using Animal.Abstractions;
 using Animal.Models.Commands;
 using Animal.Models.Results;
 using FluentValidation;
@@ -24,43 +22,32 @@ namespace Animal.Handlers
         }
 
         private readonly DomainDbContext _context;
+        private readonly IAnimalService _animalService;
 
-        public DeleteAnimalHandler(DomainDbContext context)
+        public DeleteAnimalHandler(DomainDbContext context, IAnimalService animalService)
         {
             _context = context;
+            _animalService = animalService;
         }
 
         public async Task<DeleteAnimalResult> Handle(DeleteAnimalCommand request, CancellationToken cancellationToken)
         {
             if (request.IsNull())
             {
-                return DeleteAnimalResult.ReturnNullAnimalResult();
+                return DeleteAnimalResult.RequestEmptyResult();
             }
 
             var AnimalToBeDeleted = await _context.Pets.FirstOrDefaultAsync(x => x.Id == request.Id);
 
-            if (AnimalToBeDeleted == null)
+            if (_animalService.IsAnimalNull(AnimalToBeDeleted))
             {
-                return new DeleteAnimalResult()
-                {
-                    Success = false,
-                    Message = new String($"No such animal with id: {request.Id}")
-                };
+                return DeleteAnimalResult.BadRequestResult(request.Id);
             }
 
             _context.Pets.Remove(AnimalToBeDeleted);
             await _context.SaveChangesAsync();
 
-            return new DeleteAnimalResult()
-            {
-                Success = true,
-                Message = new String($"Deleted animal with id: {request.Id}")
-            };
-        }
-
-        private DeleteAnimalResult IsRequestNull()
-        {
-
+            return DeleteAnimalResult.SuccessfulResult(request.Id);
         }
     }
 }

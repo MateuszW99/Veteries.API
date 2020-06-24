@@ -3,6 +3,7 @@ using Animal.Models.Commands;
 using Animal.Models.Results;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
 
 namespace Veteries.API.Controllers
 {
@@ -25,7 +26,7 @@ namespace Veteries.API.Controllers
 
             if (!result.Success)
             {
-                return BadRequest(result);
+                return BadRequest(result.Message);
             }
 
             return Ok(result.Pet);
@@ -33,7 +34,7 @@ namespace Veteries.API.Controllers
 
         [HttpGet]
         [Route("animals")]
-        public async Task<IActionResult> Animals()
+        public async Task<IActionResult> GetAllAnimals()
         {
             var result = await _mediator.Send(new GetAllAnimalsCommand());
             return Ok(result.Pets);
@@ -41,7 +42,7 @@ namespace Veteries.API.Controllers
 
         [HttpGet]
         [Route("animal/{id}")]
-        public async Task<IActionResult> Animal(int id)
+        public async Task<IActionResult> GetAnimalById(int id)
         {
             var command = new GetAnimalCommand() {Id = id};
 
@@ -49,10 +50,26 @@ namespace Veteries.API.Controllers
 
             if (!result.Success)
             {
-                return BadRequest();
+                return BadRequest(result.Message);
             }
 
             return Ok(result.Pet);
+        }
+
+        [HttpDelete]
+        [Route("animal/{id}")]
+        public async Task<IActionResult> DeleteAnimalById(int id)
+        {
+            var command = new DeleteAnimalCommand() { Id = id };
+
+            DeleteAnimalResult result = await _mediator.Send(command);
+
+            if (!result.Success)
+            {
+                return BadRequest(result.Message);
+            }
+
+            return Ok(result.Message);
         }
     }
 }
