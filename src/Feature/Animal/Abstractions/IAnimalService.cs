@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Domain.Entities;
 
 namespace Animal.Abstractions
 {
     public interface IAnimalService
     {
-
+        bool IsAnimalNull(Pet pet);
     }
 }

@@ -12,4 +12,12 @@ namespace Animal.Models.Commands
         public int Age { get; set; }
         public string Species { get; set; }
     }
+
+    public static class CreateAnimalCommandExtension
+    {
+        public static bool IsNull(this CreateAnimalCommand command)
+        {
+            return command == null ? true : false;
+        }
+    }
 }

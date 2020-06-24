@@ -8,7 +8,7 @@ namespace Animal.Models.Commands
         public int Id { get; set; }
     }
 
-    public static class Extension
+    public static class DeleteAnimalCommandExtension
     {
         public static bool IsNull(this DeleteAnimalCommand command)
         {
