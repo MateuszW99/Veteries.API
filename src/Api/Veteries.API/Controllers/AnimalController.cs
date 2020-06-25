@@ -44,7 +44,7 @@ namespace Veteries.API.Controllers
         [Route("animal/{id}")]
         public async Task<IActionResult> GetAnimalById(int id)
         {
-            var command = new GetAnimalCommand() {Id = id};
+            var command = new GetAnimalByIdCommand() {Id = id};
 
             GetAnimalResult result = await _mediator.Send(command);
 

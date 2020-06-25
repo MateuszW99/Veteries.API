@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using Animal.Models.Commands;
 using Animal.Models.Results;
@@ -13,9 +9,9 @@ using Persistence.Domain;
 
 namespace Animal.Handlers
 {
-    public class GetAnimalHandler : IRequestHandler<GetAnimalCommand, GetAnimalResult>
+    public class GetAnimalByIdHandler : IRequestHandler<GetAnimalByIdCommand, GetAnimalResult>
     {
-        public class Validator : AbstractValidator<GetAnimalCommand>
+        public class Validator : AbstractValidator<GetAnimalByIdCommand>
         {
             public Validator()
             {
@@ -27,31 +23,23 @@ namespace Animal.Handlers
 
         private readonly DomainDbContext _context;
 
-        public GetAnimalHandler(DomainDbContext context)
+        public GetAnimalByIdHandler(DomainDbContext context)
         {
             _context = context;
         }
 
-        public async Task<GetAnimalResult> Handle(GetAnimalCommand request, CancellationToken cancellationToken)
+        public async Task<GetAnimalResult> Handle(GetAnimalByIdCommand request, CancellationToken cancellationToken)
         {
-            if (request == null)
+            if (request.IsNull())
             {
-                return new GetAnimalResult()
-                {
-                    Success = false,
-                    Pet = null
-                };
+                return GetAnimalResult.RequestEmptyResult();
             }
 
             var pet = await _context.Pets.FirstOrDefaultAsync(x => x.Id == request.Id);
 
             if (pet == null)
             {
-                return new GetAnimalResult()
-                {
-                    Success = false,
-                    Pet = null
-                };
+                return GetAnimalResult.AnimalNotFoundResult(request.Id);
             }
 
             return new GetAnimalResult()

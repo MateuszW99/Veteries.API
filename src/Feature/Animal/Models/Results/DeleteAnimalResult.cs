@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Animal.Models.Results
+﻿namespace Animal.Models.Results
 {
     public class DeleteAnimalResult : IAnimalResult
     {
@@ -13,7 +11,7 @@ namespace Animal.Models.Results
             return new DeleteAnimalResult()
             {
                 Success = false,
-                Message = new String("Request empty")
+                Message = new string("Request empty")
             };
         }
 
@@ -22,7 +20,7 @@ namespace Animal.Models.Results
             return new DeleteAnimalResult()
             {
                 Success = false,
-                Message = new String($"Error when deleting animal with id: {id}")
+                Message = new string($"Error when deleting animal with id: {id}")
             };
         }
 
@@ -31,7 +29,7 @@ namespace Animal.Models.Results
             return new DeleteAnimalResult()
             {
                 Success = true,
-                Message = new String($"Deleted animal with id: {id}")
+                Message = new string($"Deleted animal with id: {id}")
             };
         }
     }

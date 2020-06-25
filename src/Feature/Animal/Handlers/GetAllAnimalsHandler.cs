@@ -4,6 +4,7 @@ using Animal.Models.Commands;
 using Animal.Models.Results;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 using Persistence.Domain;
 
 namespace Animal.Handlers
@@ -20,6 +21,12 @@ namespace Animal.Handlers
         public async Task<GetAllAnimalsResult> Handle(GetAllAnimalsCommand request, CancellationToken cancellationToken)
         {
             var pets = await _context.Pets.ToListAsync();
+
+            if (!pets.Any())
+            {
+                return GetAllAnimalsResult.NoAnimalFoundResult();
+            }
+
             return new GetAllAnimalsResult
             {
                 Success = true,
