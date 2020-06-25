@@ -37,14 +37,14 @@ namespace Animal.Handlers
                 return DeleteAnimalResult.RequestEmptyResult();
             }
 
-            var AnimalToBeDeleted = await _context.Pets.FirstOrDefaultAsync(x => x.Id == request.Id);
+            var animalToBeRemoved = await _context.Pets.FirstOrDefaultAsync(x => x.Id == request.Id);
 
-            if (_animalService.IsAnimalNull(AnimalToBeDeleted))
+            if (_animalService.IsAnimalNull(animalToBeRemoved))
             {
                 return DeleteAnimalResult.BadRequestResult(request.Id);
             }
 
-            _context.Pets.Remove(AnimalToBeDeleted);
+            _context.Pets.Remove(animalToBeRemoved);
             await _context.SaveChangesAsync();
 
             return DeleteAnimalResult.SuccessfulResult(request.Id);
