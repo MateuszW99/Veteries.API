@@ -1,11 +1,10 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
+using Animal.Abstractions;
 using Animal.Models.Commands;
 using Animal.Models.Results;
 using FluentValidation;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
-using Persistence.Domain;
 
 namespace Animal.Handlers
 {
@@ -21,11 +20,11 @@ namespace Animal.Handlers
             }
         }
 
-        private readonly DomainDbContext _context;
+        private readonly IAnimalService _animalService;
 
-        public GetAnimalByIdHandler(DomainDbContext context)
+        public GetAnimalByIdHandler(IAnimalService animalService)
         {
-            _context = context;
+            _animalService = animalService;
         }
 
         public async Task<GetAnimalResult> Handle(GetAnimalByIdCommand request, CancellationToken cancellationToken)
@@ -35,18 +34,14 @@ namespace Animal.Handlers
                 return GetAnimalResult.RequestEmptyResult();
             }
 
-            var animal = await _context.Animals.FirstOrDefaultAsync(x => x.Id == request.Id);
+            var animal = await _animalService.ReadAnimalAsync(request.Id);
 
-            if (animal == null)
+            if (_animalService.IsAnimalNull(animal))
             {
                 return GetAnimalResult.AnimalNotFoundResult(request.Id);
             }
 
-            return new GetAnimalResult()
-            {
-                Success = true,
-                Animal = animal
-            };
+            return GetAnimalResult.AnimalFoundResult(animal);
         }
     }
 }

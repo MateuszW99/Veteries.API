@@ -13,7 +13,7 @@ namespace Animal.Models.Results
             return new CreateAnimalResult()
             {
                 Success = false,
-                Message = new String("Empty request"),
+                Message = new string("Empty request"),
                 Animal = null
             };
         }
@@ -23,7 +23,7 @@ namespace Animal.Models.Results
             return new CreateAnimalResult
             {
                 Success = true,
-                Message = new String("Successfully added a new animal"),
+                Message = new string("Successfully added a new animal"),
                 Animal = animal
             };
         }

@@ -5,8 +5,6 @@ using Animal.Models.Commands;
 using Animal.Models.Results;
 using FluentValidation;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
-using Persistence.Domain;
 
 namespace Animal.Handlers
 {
@@ -21,12 +19,10 @@ namespace Animal.Handlers
             }
         }
 
-        private readonly DomainDbContext _context;
         private readonly IAnimalService _animalService;
 
-        public DeleteAnimalHandler(DomainDbContext context, IAnimalService animalService)
+        public DeleteAnimalHandler(IAnimalService animalService)
         {
-            _context = context;
             _animalService = animalService;
         }
 
@@ -37,17 +33,10 @@ namespace Animal.Handlers
                 return DeleteAnimalResult.RequestEmptyResult();
             }
 
-            var animalToBeRemoved = await _context.Animals.FirstOrDefaultAsync(x => x.Id == request.Id);
+            var isDeleted = _animalService.DeleteAnimalAsync(request.Id);
 
-            if (_animalService.IsAnimalNull(animalToBeRemoved))
-            {
-                return DeleteAnimalResult.BadRequestResult(request.Id);
-            }
-
-            _context.Animals.Remove(animalToBeRemoved);
-            await _context.SaveChangesAsync();
-
-            return DeleteAnimalResult.SuccessfulResult(request.Id);
+            return !isDeleted.Result ? DeleteAnimalResult.BadRequestResult(request.Id) : DeleteAnimalResult.SuccessfulResult(request.Id);
         }
+
     }
 }

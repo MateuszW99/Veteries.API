@@ -29,13 +29,12 @@ namespace Animal.Models.Results
             };
         }
 
-        public static UpdateAnimalResult SuccessfulResult(Domain.Entities.Animal animal)
+        public static UpdateAnimalResult SuccessfulResult()
         {
             return new UpdateAnimalResult()
             {
                 Success = true,
-                Message = new string("Successfully updated animal"),
-                Animal = animal
+                Message = new string("Successfully updated animal")
             };
         }
     }

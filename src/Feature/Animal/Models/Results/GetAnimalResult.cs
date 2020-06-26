@@ -25,5 +25,14 @@
                 Animal = null
             };
         }
+
+        public static GetAnimalResult AnimalFoundResult(Domain.Entities.Animal animal)
+        {
+            return new GetAnimalResult()
+            {
+                Success = true,
+                Animal = animal
+            };
+        }
     }
 }

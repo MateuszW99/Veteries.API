@@ -1,10 +1,10 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
+using Animal.Abstractions;
 using Animal.Models.Commands;
 using Animal.Models.Results;
 using FluentValidation;
 using MediatR;
-using Persistence.Domain;
 
 namespace Animal.Handlers
 {
@@ -28,11 +28,11 @@ namespace Animal.Handlers
             }
         }
 
-        private readonly DomainDbContext _context;
+        private readonly IAnimalService _service;
 
-        public CreateAnimalHandler(DomainDbContext context)
+        public CreateAnimalHandler(IAnimalService service)
         {
-            _context = context;
+            _service = service;
         }
 
 
@@ -43,17 +43,9 @@ namespace Animal.Handlers
                 return CreateAnimalResult.RequestEmptyResult();
             }
 
-            var animal = new Domain.Entities.Animal()
-            {
-                Name = request.Name,
-                Species = request.Species,
-                Age = request.Age
-            };
+            var createdAnimal = await _service.CreateAnimalAsync(request);
 
-            await _context.AddAsync(animal);
-            await _context.SaveChangesAsync();
-
-           return CreateAnimalResult.SuccessfulResult(animal);
+            return CreateAnimalResult.SuccessfulResult(createdAnimal);
         }
     }
 }

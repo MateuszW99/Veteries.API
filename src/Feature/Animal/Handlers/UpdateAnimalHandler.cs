@@ -49,22 +49,16 @@ namespace Animal.Handlers
                 return UpdateAnimalResult.RequestEmptyResult();
             }
 
-            var animalToUpdate = await _context.Animals.FirstOrDefaultAsync(x => x.Id == request.Id);
+            var updated = await _animalService.UpdateAnimalAsync(request);
 
-            if (animalToUpdate == null)
+            if (!updated)
             {
                 return UpdateAnimalResult.BadRequestResult();
             }
 
-            var mockAnimal = _animalService.CreateMockPet(request.Name, request.Age, request.Species);
-
-            _animalService.UpdateAnimal(animalToUpdate, mockAnimal);
-
-            _context.Animals.Update(animalToUpdate);
-            await _context.SaveChangesAsync();
-
-            return UpdateAnimalResult.SuccessfulResult(animalToUpdate);
-
+            return UpdateAnimalResult.SuccessfulResult();
         }
+
+
     }
 }
