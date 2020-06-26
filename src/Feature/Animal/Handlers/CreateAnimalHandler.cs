@@ -1,9 +1,7 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using Animal.Models.Commands;
 using Animal.Models.Results;
-using Domain.Entities;
 using FluentValidation;
 using MediatR;
 using Persistence.Domain;
@@ -45,17 +43,17 @@ namespace Animal.Handlers
                 return CreateAnimalResult.RequestEmptyResult();
             }
 
-            var pet = new Pet()
+            var animal = new Domain.Entities.Animal()
             {
                 Name = request.Name,
                 Species = request.Species,
                 Age = request.Age
             };
 
-            await _context.AddAsync(pet);
+            await _context.AddAsync(animal);
             await _context.SaveChangesAsync();
 
-           return CreateAnimalResult.SuccessfulResult(pet);
+           return CreateAnimalResult.SuccessfulResult(animal);
         }
     }
 }

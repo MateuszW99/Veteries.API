@@ -165,7 +165,7 @@ namespace Persistence.Migrations
 
                     b.HasIndex("OwnerId");
 
-                    b.ToTable("Pets");
+                    b.ToTable("Animals");
                 });
 
             modelBuilder.Entity("Domain.Entities.RefreshToken", b =>

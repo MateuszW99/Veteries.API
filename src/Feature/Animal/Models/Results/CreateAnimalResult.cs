@@ -1,11 +1,10 @@
 ﻿using System;
-using Domain.Entities;
 
 namespace Animal.Models.Results
 {
     public class CreateAnimalResult : IAnimalResult
     {
-        public Pet Pet { get; set; }
+        public Domain.Entities.Animal Animal { get; set; }
         public bool Success { get; set; }
         public string Message { get; set; }
 
@@ -15,17 +14,17 @@ namespace Animal.Models.Results
             {
                 Success = false,
                 Message = new String("Empty request"),
-                Pet = null
+                Animal = null
             };
         }
 
-        public static CreateAnimalResult SuccessfulResult(Pet pet)
+        public static CreateAnimalResult SuccessfulResult(Domain.Entities.Animal animal)
         {
             return new CreateAnimalResult
             {
                 Success = true,
                 Message = new String("Successfully added a new animal"),
-                Pet = pet
+                Animal = animal
             };
         }
     }

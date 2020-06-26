@@ -10,8 +10,8 @@ using Persistence.Domain;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DomainDbContext))]
-    [Migration("20200608191002_Add_Simple_Schema")]
-    partial class Add_Simple_Schema
+    [Migration("20200626173758_RenamePetToAnimal")]
+    partial class RenamePetToAnimal
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -20,6 +20,32 @@ namespace Persistence.Migrations
                 .HasAnnotation("ProductVersion", "3.1.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("Domain.Entities.Animal", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("Age")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OwnerId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Species")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OwnerId");
+
+                    b.ToTable("Animals");
+                });
 
             modelBuilder.Entity("Domain.Entities.ApplicationUser", b =>
                 {
@@ -99,18 +125,18 @@ namespace Persistence.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int>("AnimalId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("PetId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("PetId");
+                    b.HasIndex("AnimalId");
 
                     b.ToTable("Appointments");
                 });
@@ -142,52 +168,34 @@ namespace Persistence.Migrations
                     b.ToTable("Offices");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Pet", b =>
+            modelBuilder.Entity("Domain.Entities.RefreshToken", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<string>("Token")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("Age")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("OwnerId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("Species")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("OwnerId");
-
-                    b.ToTable("Animals");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Token", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("Expires")
+                    b.Property<DateTime>("CreationDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("RefreshToken")
+                    b.Property<DateTime>("ExpiryDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("Invalidated")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("JwtId")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("RemoteIpAddress")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("Used")
+                        .HasColumnType("bit");
+
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("Id");
+                    b.HasKey("Token");
 
                     b.HasIndex("UserId");
 
@@ -325,21 +333,23 @@ namespace Persistence.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Appointment", b =>
-                {
-                    b.HasOne("Domain.Entities.Pet", null)
-                        .WithMany("Appointments")
-                        .HasForeignKey("PetId");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Pet", b =>
+            modelBuilder.Entity("Domain.Entities.Animal", b =>
                 {
                     b.HasOne("Domain.Entities.ApplicationUser", "Owner")
                         .WithMany()
                         .HasForeignKey("OwnerId");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Token", b =>
+            modelBuilder.Entity("Domain.Entities.Appointment", b =>
+                {
+                    b.HasOne("Domain.Entities.Animal", "Animal")
+                        .WithMany("Appointments")
+                        .HasForeignKey("AnimalId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.Entities.RefreshToken", b =>
                 {
                     b.HasOne("Domain.Entities.ApplicationUser", "User")
                         .WithMany()

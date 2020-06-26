@@ -1,10 +1,8 @@
-﻿using Domain.Entities;
-
-namespace Animal.Models.Results
+﻿namespace Animal.Models.Results
 {
     public class GetAnimalResult : IAnimalResult
     {
-        public Pet Pet { get; set; }
+        public Domain.Entities.Animal Animal { get; set; }
         public bool Success { get; set; }
         public string Message { get; set; }
 
@@ -14,7 +12,7 @@ namespace Animal.Models.Results
             {
                 Success = false,
                 Message = new string("Request empty"),
-                Pet = null
+                Animal = null
             };
         }
 
@@ -24,7 +22,7 @@ namespace Animal.Models.Results
             {
                 Success = false,
                 Message = new string($"Error when deleting animal with id: {id}"),
-                Pet = null
+                Animal = null
             };
         }
     }
