@@ -73,7 +73,7 @@ namespace Veteries.API.Controllers
         }
 
         [HttpPost]
-        [Route("animal/{id}/{name}/{age}/{species}")]
+        [Route("animal/{id}")]
         public async Task<IActionResult> UpdateAnimal(int id, string name, int? age, string species)
         {
             var command = new UpdateAnimalCommand() { Id = id, Name = name, Age = age.Value, Species = species };
