@@ -21,6 +21,14 @@ namespace Animal.Handlers
 
                 this.RuleFor(x => x.Age)
                     .GreaterThan(0);
+
+                this.RuleFor(x => x.Species)
+                    .NotNull()
+                    .Length(2, 30);
+
+                this.RuleFor(x => x.Name)
+                    .NotNull()
+                    .Length(2, 30);
             }
         }
 
