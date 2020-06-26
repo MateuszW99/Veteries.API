@@ -1,11 +1,11 @@
-﻿using System.Security.Cryptography.X509Certificates;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using Animal.Abstractions;
 using Animal.Models.Commands;
 using Animal.Models.Results;
 using FluentValidation;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Persistence.Domain;
 
 namespace Animal.Handlers
@@ -16,14 +16,8 @@ namespace Animal.Handlers
         {
             public Validator()
             {
-                this.RuleFor(x => x.Name)
-                    .NotNull()
-                    .Length(2, 20);
-
-                this.RuleFor(x => x.Species)
-                    .NotNull()
-                    .Length(2, 20);
-
+                this.RuleFor(x => x.Id)
+                    .GreaterThan(0);
 
                 this.RuleFor(x => x.Age)
                     .GreaterThan(0);
@@ -47,7 +41,7 @@ namespace Animal.Handlers
                 return UpdateAnimalResult.RequestEmptyResult();
             }
 
-            var animalToUpdate = await _context.Pets.FindAsync(request.Name, request.Age, request.Species);
+            var animalToUpdate = await _context.Pets.FirstOrDefaultAsync(x => x.Id == request.Id);
 
             if (animalToUpdate == null)
             {

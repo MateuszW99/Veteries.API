@@ -71,5 +71,22 @@ namespace Veteries.API.Controllers
 
             return Ok(result.Message);
         }
+
+        [HttpPost]
+        [Route("animal/{id}/{name}/{age}/{species}")]
+        public async Task<IActionResult> UpdateAnimal(int id, string name, int? age, string species)
+        {
+            var command = new UpdateAnimalCommand() { Id = id, Name = name, Age = age.Value, Species = species };
+
+            UpdateAnimalResult result = await _mediator.Send(command);
+
+            if (!result.Success)
+            {
+                return BadRequest(result.Message);
+            }
+
+            return Ok(result.Pet);
+
+        }
     }
 }
