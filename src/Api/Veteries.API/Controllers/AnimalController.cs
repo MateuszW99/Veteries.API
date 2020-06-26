@@ -3,7 +3,6 @@ using Animal.Models.Commands;
 using Animal.Models.Results;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Routing;
 
 namespace Veteries.API.Controllers
 {
@@ -29,7 +28,7 @@ namespace Veteries.API.Controllers
                 return BadRequest(result.Message);
             }
 
-            return Ok(result.Pet);
+            return Ok(result.Animal);
         }
 
         [HttpGet]
@@ -37,7 +36,7 @@ namespace Veteries.API.Controllers
         public async Task<IActionResult> GetAllAnimals()
         {
             var result = await _mediator.Send(new GetAllAnimalsCommand());
-            return Ok(result.Pets);
+            return Ok(result.Animals);
         }
 
         [HttpGet]
@@ -53,7 +52,7 @@ namespace Veteries.API.Controllers
                 return BadRequest(result.Message);
             }
 
-            return Ok(result.Pet);
+            return Ok(result.Animal);
         }
 
         [HttpDelete]
@@ -73,7 +72,7 @@ namespace Veteries.API.Controllers
         }
 
         [HttpPost]
-        [Route("animal/{id}/{name}/{age}/{species}")]
+        [Route("animal/{id}")]
         public async Task<IActionResult> UpdateAnimal(int id, string name, int? age, string species)
         {
             var command = new UpdateAnimalCommand() { Id = id, Name = name, Age = age.Value, Species = species };
@@ -85,8 +84,8 @@ namespace Veteries.API.Controllers
                 return BadRequest(result.Message);
             }
 
-            return Ok(result.Pet);
-
+            return Ok(result.Animal);
         }
+
     }
 }

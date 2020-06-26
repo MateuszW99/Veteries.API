@@ -1,11 +1,9 @@
-﻿using Domain.Entities;
-
-namespace Animal.Abstractions
+﻿namespace Animal.Abstractions
 {
     public interface IAnimalService
     {
-        bool IsAnimalNull(Pet pet);
-        Pet CreateMockPet(string name, int age, string species);
-        void UpdateAnimal(Pet destination, Pet source);
+        bool IsAnimalNull(Domain.Entities.Animal animal);
+        Domain.Entities.Animal CreateMockPet(string name, int age, string species);
+        void UpdateAnimal(Domain.Entities.Animal destination, Domain.Entities.Animal source);
     }
 }

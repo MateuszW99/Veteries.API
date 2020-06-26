@@ -49,7 +49,7 @@ namespace Animal.Handlers
                 return UpdateAnimalResult.RequestEmptyResult();
             }
 
-            var animalToUpdate = await _context.Pets.FirstOrDefaultAsync(x => x.Id == request.Id);
+            var animalToUpdate = await _context.Animals.FirstOrDefaultAsync(x => x.Id == request.Id);
 
             if (animalToUpdate == null)
             {
@@ -60,7 +60,7 @@ namespace Animal.Handlers
 
             _animalService.UpdateAnimal(animalToUpdate, mockAnimal);
 
-            _context.Pets.Update(animalToUpdate);
+            _context.Animals.Update(animalToUpdate);
             await _context.SaveChangesAsync();
 
             return UpdateAnimalResult.SuccessfulResult(animalToUpdate);

@@ -13,7 +13,7 @@ namespace Persistence.Domain
 
         public DbSet<RefreshToken> RefreshTokens { get; set; }
         public DbSet<Appointment> Appointments { get; set; }
-        public DbSet<Pet> Pets { get; set; }
+        public DbSet<Animal> Animals { get; set; }
         public DbSet<Office> Offices { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)

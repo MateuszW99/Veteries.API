@@ -35,7 +35,7 @@ namespace Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Pets",
+                name: "Animals",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -94,7 +94,7 @@ namespace Persistence.Migrations
                     table.ForeignKey(
                         name: "FK_Appointments_Pets_PetId",
                         column: x => x.PetId,
-                        principalTable: "Pets",
+                        principalTable: "Animals",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -106,7 +106,7 @@ namespace Persistence.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_Pets_OwnerId",
-                table: "Pets",
+                table: "Animals",
                 column: "OwnerId");
 
             migrationBuilder.CreateIndex(
@@ -127,7 +127,7 @@ namespace Persistence.Migrations
                 name: "RefreshTokens");
 
             migrationBuilder.DropTable(
-                name: "Pets");
+                name: "Animals");
 
             migrationBuilder.DropColumn(
                 name: "FirstName",

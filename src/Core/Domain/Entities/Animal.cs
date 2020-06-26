@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Entities
 {
-    public class Pet
+    public class Animal
     {
         public int Id { get; set; }
         public string Name { get; set; }

@@ -1,19 +1,17 @@
 ﻿using Animal.Abstractions;
-using Domain.Entities;
-using Microsoft.AspNetCore.Http.Features;
 
 namespace Animal.Internals
 {
     public class AnimalService : IAnimalService
     {
-        public bool IsAnimalNull(Pet pet)
+        public bool IsAnimalNull(Domain.Entities.Animal animal)
         {
-            return pet == null ? true : false;
+            return animal == null ? true : false;
         }
 
-        public Pet CreateMockPet(string name, int age, string species)
+        public Domain.Entities.Animal CreateMockPet(string name, int age, string species)
         {
-            return new Pet()
+            return new Domain.Entities.Animal()
             {
                 Name = name,
                 Age = age,
@@ -21,7 +19,7 @@ namespace Animal.Internals
             };
         }
 
-        public void UpdateAnimal(Pet destination, Pet source)
+        public void UpdateAnimal(Domain.Entities.Animal destination, Domain.Entities.Animal source)
         {
             if (source.Name != null)
             {

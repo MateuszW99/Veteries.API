@@ -20,9 +20,9 @@ namespace Animal.Handlers
 
         public async Task<GetAllAnimalsResult> Handle(GetAllAnimalsCommand request, CancellationToken cancellationToken)
         {
-            var pets = await _context.Pets.ToListAsync();
+            var animals = await _context.Animals.ToListAsync();
 
-            if (!pets.Any())
+            if (!animals.Any())
             {
                 return GetAllAnimalsResult.NoAnimalFoundResult();
             }
@@ -30,7 +30,7 @@ namespace Animal.Handlers
             return new GetAllAnimalsResult
             {
                 Success = true,
-                Pets = pets
+                Animals = animals
             };
         }
     }

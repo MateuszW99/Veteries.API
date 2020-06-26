@@ -6,7 +6,7 @@ namespace Animal.Models.Results
     {
         public bool Success { get; set; }
         public string Message { get; set; }
-        public Pet Pet { get; set; }
+        public Domain.Entities.Animal Animal { get; set; }
 
         public static UpdateAnimalResult RequestEmptyResult()
         { 
@@ -14,7 +14,7 @@ namespace Animal.Models.Results
             {
                 Success = false,
                 Message = new string("Empty request"),
-                Pet = null
+                Animal = null
             };
             
         }
@@ -24,18 +24,18 @@ namespace Animal.Models.Results
             return new UpdateAnimalResult()
             {
                 Success = false,
-                Message = ($"Error when updating animal"),
-                Pet = null
+                Message = new string($"Error when updating animal"),
+                Animal = null
             };
         }
 
-        public static UpdateAnimalResult SuccessfulResult(Pet pet)
+        public static UpdateAnimalResult SuccessfulResult(Domain.Entities.Animal animal)
         {
             return new UpdateAnimalResult()
             {
                 Success = true,
                 Message = new string("Successfully updated animal"),
-                Pet = pet
+                Animal = animal
             };
         }
     }

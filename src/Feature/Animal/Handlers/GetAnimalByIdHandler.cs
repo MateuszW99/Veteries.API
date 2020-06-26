@@ -35,9 +35,9 @@ namespace Animal.Handlers
                 return GetAnimalResult.RequestEmptyResult();
             }
 
-            var pet = await _context.Pets.FirstOrDefaultAsync(x => x.Id == request.Id);
+            var animal = await _context.Animals.FirstOrDefaultAsync(x => x.Id == request.Id);
 
-            if (pet == null)
+            if (animal == null)
             {
                 return GetAnimalResult.AnimalNotFoundResult(request.Id);
             }
@@ -45,7 +45,7 @@ namespace Animal.Handlers
             return new GetAnimalResult()
             {
                 Success = true,
-                Pet = pet
+                Animal = animal
             };
         }
     }
