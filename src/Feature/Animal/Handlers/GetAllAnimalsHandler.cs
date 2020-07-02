@@ -1,37 +1,32 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
+using Animal.Abstractions;
 using Animal.Models.Commands;
 using Animal.Models.Results;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
-using Persistence.Domain;
 
 namespace Animal.Handlers
 {
     public class GetAllAnimalsHandler : IRequestHandler<GetAllAnimalsCommand, GetAllAnimalsResult>
     {
-        private readonly DomainDbContext _context;
+        private readonly IAnimalService _animalService;
 
-        public GetAllAnimalsHandler(DomainDbContext context)
+        public GetAllAnimalsHandler(IAnimalService animalService)
         {
-            _context = context;
+            _animalService = animalService;
         }
 
         public async Task<GetAllAnimalsResult> Handle(GetAllAnimalsCommand request, CancellationToken cancellationToken)
         {
-            var animals = await _context.Animals.ToListAsync();
+            var animals = await _animalService.ReadAllAnimals();
 
             if (!animals.Any())
             {
                 return GetAllAnimalsResult.NoAnimalFoundResult();
             }
 
-            return new GetAllAnimalsResult
-            {
-                Success = true,
-                Animals = animals
-            };
+            return GetAllAnimalsResult.AnimalListResult(animals);
         }
     }
 }

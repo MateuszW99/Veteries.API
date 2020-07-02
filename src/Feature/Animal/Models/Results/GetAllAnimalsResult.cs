@@ -17,5 +17,14 @@ namespace Animal.Models.Results
                 Animals = null
             };
         }
+
+        public static GetAllAnimalsResult AnimalListResult(IEnumerable<Domain.Entities.Animal> animals)
+        {
+            return new GetAllAnimalsResult()
+            {
+                Success = true,
+                Animals = animals
+            };
+        }
     }
 }
