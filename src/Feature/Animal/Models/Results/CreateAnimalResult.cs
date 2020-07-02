@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Animal.Models.Results
+﻿namespace Animal.Models.Results
 {
     public class CreateAnimalResult : IAnimalResult
     {
