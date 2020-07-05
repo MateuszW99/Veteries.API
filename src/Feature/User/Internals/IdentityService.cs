@@ -82,13 +82,6 @@ namespace User.Internals
                 return IdentityResult.InvalidPasswordResult();
             }
 
-            //var userHasValidPassword = await _userManager.CheckPasswordAsync(user, password);
-
-            //if (!userHasValidPassword)
-            //{
-            //   return IdentityResult.InvalidPasswordResult();
-            //}
-
             return await GenerateAuthenticationResultAsync(user);
         }
 
