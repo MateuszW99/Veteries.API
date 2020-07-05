@@ -2,6 +2,8 @@
 using System.Threading.Tasks;
 using Animal.Abstractions;
 using Animal.Models.Commands;
+using Extensions;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Persistence.Domain;
 
@@ -10,25 +12,17 @@ namespace Animal.Internals
     public class AnimalService : IAnimalService
     {
         private readonly DomainDbContext _context;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public AnimalService(DomainDbContext context)
+        public AnimalService(DomainDbContext context, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public bool IsAnimalNull(Domain.Entities.Animal animal)
         {
             return animal == null ? true : false;
-        }
-
-        public Domain.Entities.Animal CreateMockPet(string name, int age, string species)
-        {
-            return new Domain.Entities.Animal()
-            {
-                Name = name,
-                Age = age,
-                Species = species
-            };
         }
 
         public async Task<Domain.Entities.Animal> ReadAnimalAsync(int animalId)
@@ -55,7 +49,7 @@ namespace Animal.Internals
             return true;
         }
 
-        private void UpdateAnimalCredentials(UpdateAnimalCommand request, Domain.Entities.Animal animalToUpdate)
+        private static void UpdateAnimalCredentials(UpdateAnimalCommand request, Domain.Entities.Animal animalToUpdate)
         {
             animalToUpdate.Name = request.Name ?? animalToUpdate.Name;
             animalToUpdate.Species = request.Name ?? animalToUpdate.Species;
@@ -90,7 +84,8 @@ namespace Animal.Internals
             {
                 Name = request.Name,
                 Age = request.Age,
-                Species = request.Species
+                Species = request.Species,
+                OwnerId = _httpContextAccessor.HttpContext.GetUserId()
             };
 
             await _context.Animals.AddAsync(AnimalToCreate);
