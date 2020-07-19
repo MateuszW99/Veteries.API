@@ -2,10 +2,11 @@
 
 namespace Animal.Models.Results
 {
-    public class UpdateAnimalResult : IAnimalResult
+    public class UpdateAnimalResult : AnimalResult
     {
         public bool Success { get; set; }
         public string Message { get; set; }
+
         public Domain.Entities.Animal Animal { get; set; }
 
         public static UpdateAnimalResult RequestEmptyResult()
@@ -29,7 +30,7 @@ namespace Animal.Models.Results
             };
         }
 
-        public static UpdateAnimalResult SuccessfulResult()
+        public new static UpdateAnimalResult SuccessfulResult()
         {
             return new UpdateAnimalResult()
             {
