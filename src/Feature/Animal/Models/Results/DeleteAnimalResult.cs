@@ -32,5 +32,14 @@
                 Message = new string($"Deleted animal with id: {id}")
             };
         }
+
+        public static DeleteAnimalResult AccessDeniedResult()
+        {
+            return new DeleteAnimalResult()
+            {
+                Success = false,
+                Message = new string("You can't delete this animal")
+            };
+        }
     }
 }

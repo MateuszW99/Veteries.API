@@ -32,13 +32,11 @@ namespace Animal.Handlers
             }
         }
 
-        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IAnimalService _animalService;
 
-        public UpdateAnimalHandler(IAnimalService animalService, IHttpContextAccessor httpContextAccessor)
+        public UpdateAnimalHandler(IAnimalService animalService)
         {
             _animalService = animalService;
-            _httpContextAccessor = httpContextAccessor;
         }
 
 
@@ -49,9 +47,9 @@ namespace Animal.Handlers
                 return UpdateAnimalResult.RequestEmptyResult();
             }
 
-            var userCanUpdateAnimal = _animalService.UserOwnsAnimal(request.Id, _httpContextAccessor.HttpContext.GetUserId());
+            var userCanUpdateAnimal = await _animalService.UserOwnsAnimalAsync(request.Id, request.UserId);
 
-            if (!userCanUpdateAnimal.Result)
+            if (!userCanUpdateAnimal)
             {
                 return UpdateAnimalResult.AccessDeniedResult();
             }

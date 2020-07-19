@@ -73,7 +73,11 @@ namespace Veteries.API.Controllers
         [Route("animals/{id}")]
         public async Task<IActionResult> DeleteAnimalById(int id)
         {
-            var command = new DeleteAnimalCommand() { Id = id };
+            var command = new DeleteAnimalCommand()
+            {
+                Id = id,
+                UserId = HttpContext.GetUserId()
+            };
 
             DeleteAnimalResult result = await _mediator.Send(command);
 
@@ -89,7 +93,14 @@ namespace Veteries.API.Controllers
         [Route("animals/{id}")]
         public async Task<IActionResult> UpdateAnimal(int id, string name, int age, string species)
         {
-            var command = new UpdateAnimalCommand() { Id = id, Name = name, Age = age, Species = species };
+            var command = new UpdateAnimalCommand()
+            {
+                Id = id, 
+                Name = name, 
+                Age = age, 
+                Species = species,
+                UserId = HttpContext.GetUserId()
+            };
 
             UpdateAnimalResult result = await _mediator.Send(command);
 

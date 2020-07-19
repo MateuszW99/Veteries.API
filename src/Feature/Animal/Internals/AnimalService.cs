@@ -36,19 +36,26 @@ namespace Animal.Internals
 
         public async Task<bool> UpdateAnimalAsync(UpdateAnimalCommand request)
         {
-            var animalToUpdate = await _context.Animals.FirstOrDefaultAsync(x => x.Id == request.Id);
+            try
+            {
+                var animalToUpdate = await _context.Animals.FirstOrDefaultAsync(x => x.Id == request.Id);
 
-            if (IsAnimalNull(animalToUpdate))
+                if (IsAnimalNull(animalToUpdate))
+                {
+                    return false;
+                }
+
+                UpdateAnimalCredentials(request, animalToUpdate);
+
+                _context.Animals.Update(animalToUpdate);
+                await _context.SaveChangesAsync();
+
+                return true;
+            }
+            catch
             {
                 return false;
             }
-
-            UpdateAnimalCredentials(request, animalToUpdate);
-
-            _context.Animals.Update(animalToUpdate);
-            await _context.SaveChangesAsync();
-
-            return true;
         }
 
         private static void UpdateAnimalCredentials(UpdateAnimalCommand request, Domain.Entities.Animal animalToUpdate)
@@ -98,7 +105,7 @@ namespace Animal.Internals
             return animalToCreate;
         }
 
-        public async Task<bool> UserOwnsAnimal(int animalId, string userId)
+        public async Task<bool> UserOwnsAnimalAsync(int animalId, string userId)
         {
             try
             {
