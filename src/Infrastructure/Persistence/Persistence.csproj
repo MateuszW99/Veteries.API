@@ -7,6 +7,10 @@
   <ItemGroup>
     <Compile Remove="Migrations\20200615133810_AddIdentityToToken.cs" />
     <Compile Remove="Migrations\20200615133810_AddIdentityToToken.Designer.cs" />
+    <Compile Remove="Migrations\20200708195746_UserClaimsMigration.cs" />
+    <Compile Remove="Migrations\20200708195746_UserClaimsMigration.Designer.cs" />
+    <Compile Remove="Migrations\20200719133254_xd.cs" />
+    <Compile Remove="Migrations\20200719133254_xd.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

@@ -18,6 +18,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{E9522D1D-870E-4F85-9C8F-2649D92351E2}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{DBC552C0-84FF-437A-8738-B54B6A21B285}"
+	ProjectSection(SolutionItems) = preProject
+		src\Feature\User\DependencyInjection.cs = src\Feature\User\DependencyInjection.cs
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Models", "src\Common\Models\Models.csproj", "{F95E99FF-5856-4875-AB69-1A4690F7C952}"
 EndProject
@@ -31,7 +34,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "User", "src\Feature\User\Us
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Animal", "src\Feature\Animal\Animal.csproj", "{6F24157C-900F-440F-9D36-907EAAC08E1A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Extensions", "src\Common\Extensions\Extensions.csproj", "{E4043E02-FB6D-4341-8BD8-054BDA4D812F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Extensions", "src\Common\Extensions\Extensions.csproj", "{E4043E02-FB6D-4341-8BD8-054BDA4D812F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

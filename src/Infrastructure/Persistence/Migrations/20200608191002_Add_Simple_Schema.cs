@@ -47,9 +47,9 @@ namespace Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Pets", x => x.Id);
+                    table.PrimaryKey("PK_Animal", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Pets_AspNetUsers_OwnerId",
+                        name: "FK_Animals_AspNetUsers_OwnerId",
                         column: x => x.OwnerId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
@@ -86,28 +86,28 @@ namespace Persistence.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Date = table.Column<DateTime>(nullable: false),
                     Description = table.Column<string>(nullable: true),
-                    PetId = table.Column<int>(nullable: true)
+                    AnimalId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Appointments", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Appointments_Pets_PetId",
-                        column: x => x.PetId,
+                        name: "FK_Appointments_Animals_AnimalId",
+                        column: x => x.AnimalId,
                         principalTable: "Animals",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Appointments_PetId",
+                name: "IX_Appointments_AnimalId",
                 table: "Appointments",
-                column: "PetId");
+                column: "AnimalId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Pets_OwnerId",
+                name: "IX_Animals_OwnerId",
                 table: "Animals",
-                column: "OwnerId");
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_RefreshTokens_UserId",

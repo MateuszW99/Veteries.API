@@ -1,7 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using Animal.Models.Commands;
 using Animal.Models.Results;
+using Extensions;
 using MediatR;
+using Microsoft.AspNetCore.Identity.UI.V3.Pages.Internal.Account.Manage;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Veteries.API.Controllers
@@ -18,9 +21,17 @@ namespace Veteries.API.Controllers
         }
 
         [HttpPost]
-        [Route("animal")]
-        public async Task<IActionResult> CreateAnimal([FromBody] CreateAnimalCommand command)
+        [Route("animals")]
+        public async Task<IActionResult> CreateAnimal(string name, int age, string species)
         {
+            var command = new CreateAnimalCommand()
+            {
+                Name = name,
+                Age = age,
+                Species = species,
+                UserId = HttpContext.User.Claims.Single(x => x.Type == "id").Value.ToString()
+            };
+
             var result = await _mediator.Send(command);
 
             if (!result.Success)
@@ -40,7 +51,7 @@ namespace Veteries.API.Controllers
         }
 
         [HttpGet]
-        [Route("animal/{id}")]
+        [Route("animals/{id}")]
         public async Task<IActionResult> GetAnimalById(int id)
         {
             var command = new GetAnimalByIdCommand() {Id = id};
@@ -56,7 +67,7 @@ namespace Veteries.API.Controllers
         }
 
         [HttpDelete]
-        [Route("animal/{id}")]
+        [Route("animals/{id}")]
         public async Task<IActionResult> DeleteAnimalById(int id)
         {
             var command = new DeleteAnimalCommand() { Id = id };
@@ -72,10 +83,10 @@ namespace Veteries.API.Controllers
         }
 
         [HttpPost]
-        [Route("animal/{id}")]
-        public async Task<IActionResult> UpdateAnimal(int id, string name, int? age, string species)
+        [Route("animals/{id}")]
+        public async Task<IActionResult> UpdateAnimal(int id, string name, int age, string species)
         {
-            var command = new UpdateAnimalCommand() { Id = id, Name = name, Age = age.Value, Species = species };
+            var command = new UpdateAnimalCommand() { Id = id, Name = name, Age = age, Species = species };
 
             UpdateAnimalResult result = await _mediator.Send(command);
 

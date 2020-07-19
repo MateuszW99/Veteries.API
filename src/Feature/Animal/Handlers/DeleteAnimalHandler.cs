@@ -33,9 +33,9 @@ namespace Animal.Handlers
                 return DeleteAnimalResult.RequestEmptyResult();
             }
 
-            var isDeleted = _animalService.DeleteAnimalAsync(request.Id);
+            var isDeleted = await _animalService.DeleteAnimalAsync(request.Id);
 
-            return !isDeleted.Result ? DeleteAnimalResult.BadRequestResult(request.Id) : DeleteAnimalResult.SuccessfulResult(request.Id);
+            return !isDeleted ? DeleteAnimalResult.BadRequestResult(request.Id) : DeleteAnimalResult.SuccessfulResult(request.Id);
         }
 
     }

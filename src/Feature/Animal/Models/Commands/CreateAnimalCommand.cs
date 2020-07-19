@@ -8,5 +8,6 @@ namespace Animal.Models.Commands
         public string Name { get; set; }
         public int Age { get; set; }
         public string Species { get; set; }
+        public string UserId { get; set; }    
     }
 }

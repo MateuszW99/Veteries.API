@@ -105,12 +105,12 @@ namespace Persistence.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("PetId")
+                    b.Property<int?>("AnimalId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PetId");
+                    b.HasIndex("AnimalId");
 
                     b.ToTable("Appointments");
                 });
@@ -142,7 +142,7 @@ namespace Persistence.Migrations
                     b.ToTable("Offices");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Pet", b =>
+            modelBuilder.Entity("Domain.Entities.Animals", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -155,7 +155,7 @@ namespace Persistence.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("OwnerId")
+                    b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Species")
@@ -163,7 +163,7 @@ namespace Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("OwnerId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Animals");
                 });
@@ -327,16 +327,16 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.Entities.Appointment", b =>
                 {
-                    b.HasOne("Domain.Entities.Pet", null)
+                    b.HasOne("Domain.Entities.Animals", null)
                         .WithMany("Appointments")
-                        .HasForeignKey("PetId");
+                        .HasForeignKey("AnimalId");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Pet", b =>
+            modelBuilder.Entity("Domain.Entities.Animals", b =>
                 {
-                    b.HasOne("Domain.Entities.ApplicationUser", "Owner")
+                    b.HasOne("Domain.Entities.ApplicationUser", "User")
                         .WithMany()
-                        .HasForeignKey("OwnerId");
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("Domain.Entities.Token", b =>

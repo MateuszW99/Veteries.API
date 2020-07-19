@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Models.Helpers;
@@ -36,14 +37,17 @@ namespace Veteries.API
         public void ConfigureServices(IServiceCollection services)
         {
             var appSettingsSection = Configuration.GetSection("AppSettings");
-            services.AddHttpContextAccessor();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.Configure<AppSettings>(appSettingsSection);
+            services.AddHttpContextAccessor();
             services.AddControllers();
             services.AddVeteriesSwagger(Configuration);
+            services.AddApiIdentity(Configuration);
             services.AddJwtAuthentication(Configuration);
             services.AddDatabaseContext(Configuration);
-            services.AddApiIdentity(Configuration);
+            services.AddMvc();
         }
+
 
         public void ConfigureContainer(ContainerBuilder builder)
         {
@@ -62,7 +66,7 @@ namespace Veteries.API
             {
                 app.UseDeveloperExceptionPage();
             }
-
+            
             app.UseHttpsRedirection();
             app.UseRouting();
             app.UseAuthorization();

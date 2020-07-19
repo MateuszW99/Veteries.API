@@ -5,6 +5,7 @@ using Animal.Models.Commands;
 using Animal.Models.Results;
 using FluentValidation;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 
 namespace Animal.Handlers
 {

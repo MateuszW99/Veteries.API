@@ -13,5 +13,6 @@ namespace Animal.Abstractions
         Task<bool> UpdateAnimalAsync(UpdateAnimalCommand request);
         Task<bool> DeleteAnimalAsync(int animalId);
         Task<IEnumerable<Domain.Entities.Animal>> ReadAllAnimals();
+        Task<bool> UserOwnsAnimal(int animalId, string userId);
     }
 }

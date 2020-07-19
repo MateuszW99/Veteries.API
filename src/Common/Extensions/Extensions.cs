@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
 
 namespace Extensions
@@ -7,7 +8,19 @@ namespace Extensions
     {
         public static string GetUserId(this HttpContext httpContext)
         {
-            return httpContext.User == null ? string.Empty : httpContext.User.Claims.Single(x => x.Type == "id").Value;
+            if (httpContext == null)
+            {
+                return string.Empty;
+            }
+            if (httpContext.User == null)
+            {
+                return string.Empty;
+            }
+
+            //var x = httpContext;
+            //var ss = httpContext.User.Identity.Name;
+            var t = httpContext.User.Claims.ToString();
+            return httpContext.User.Claims.Single(x => x.Type == "id").ToString();
         }
     }
 }

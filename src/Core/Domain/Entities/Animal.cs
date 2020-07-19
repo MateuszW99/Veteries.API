@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Security.Policy;
+using Microsoft.AspNetCore.Identity;
 
 namespace Domain.Entities
 {
@@ -12,8 +14,8 @@ namespace Domain.Entities
 
         public ICollection<Appointment> Appointments { get; set; }
 
-        public string OwnerId { get; set; }
-        [ForeignKey("OwnerId")] 
-        public virtual ApplicationUser Owner { get; set; }
+        public string UserId { get; set; }
+        [ForeignKey(nameof(UserId))]
+        public ApplicationUser User { get; set; }
     }
 }

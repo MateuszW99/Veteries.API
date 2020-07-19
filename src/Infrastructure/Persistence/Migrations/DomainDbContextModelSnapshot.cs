@@ -32,18 +32,25 @@ namespace Persistence.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("OwnerId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("Species")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("OwnerId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Animals");
                 });
+
+            modelBuilder.Entity("Domain.Entities.Animal", b =>
+                {
+                    b.HasOne("Domain.Entities.ApplicationUser", "User")
+                        .WithOne()
+                        .HasForeignKey("UserId");
+                });  
 
             modelBuilder.Entity("Domain.Entities.ApplicationUser", b =>
                 {
@@ -270,7 +277,7 @@ namespace Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("tUserId");
 
                     b.ToTable("AspNetUserClaims");
                 });
@@ -333,9 +340,9 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.Entities.Animal", b =>
                 {
-                    b.HasOne("Domain.Entities.ApplicationUser", "Owner")
+                    b.HasOne("Domain.Entities.ApplicationUser", "User")
                         .WithMany()
-                        .HasForeignKey("OwnerId");
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("Domain.Entities.Appointment", b =>

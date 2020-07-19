@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Animal.Abstractions;
 using Animal.Models.Commands;
@@ -6,6 +7,7 @@ using Extensions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Persistence.Domain;
+using Animal = Domain.Entities.Animal;
 
 namespace Animal.Internals
 {
@@ -78,20 +80,46 @@ namespace Animal.Internals
             return animals;
         }
 
+
+
         public async Task<Domain.Entities.Animal> CreateAnimalAsync(CreateAnimalCommand request)
         {
-            var AnimalToCreate = new Domain.Entities.Animal()
+            var animalToCreate = new Domain.Entities.Animal()
             {
                 Name = request.Name,
                 Age = request.Age,
                 Species = request.Species,
-                OwnerId = _httpContextAccessor.HttpContext.GetUserId()
+                UserId = request.UserId
             };
 
-            await _context.Animals.AddAsync(AnimalToCreate);
+            await _context.Animals.AddAsync(animalToCreate);
             await _context.SaveChangesAsync();
 
-            return AnimalToCreate;
+            return animalToCreate;
+        }
+
+        public async Task<bool> UserOwnsAnimal(int animalId, string userId)
+        {
+            try
+            {
+                var animal = await _context.Animals.FirstOrDefaultAsync(x => x.Id == animalId);
+
+                if (animal == null)
+                {
+                    return false;
+                }
+
+                if (animal.UserId != userId)
+                {
+                    return false;
+                }
+
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
     }
 }

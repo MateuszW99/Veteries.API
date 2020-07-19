@@ -37,5 +37,14 @@ namespace Animal.Models.Results
                 Message = new string("Successfully updated animal")
             };
         }
+
+        public static UpdateAnimalResult AccessDeniedResult()
+        {
+            return new UpdateAnimalResult()
+            {
+                Success = false,
+                Message = new string("You can't update this animal data")
+            };
+        }
     }
 }
