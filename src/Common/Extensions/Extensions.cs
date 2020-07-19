@@ -20,7 +20,7 @@ namespace Extensions
             //var x = httpContext;
             //var ss = httpContext.User.Identity.Name;
             var t = httpContext.User.Claims.ToString();
-            return httpContext.User.Claims.Single(x => x.Type == "id").ToString();
+            return httpContext.User.Claims.Single(x => x.Type == "id").Value.ToString();
         }
     }
 }

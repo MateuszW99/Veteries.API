@@ -32,7 +32,7 @@ namespace Veteries.API.Controllers
                 Name = name,
                 Age = age,
                 Species = species,
-                UserId = HttpContext.User.Claims.Single(x => x.Type == "id").Value.ToString()
+                UserId = HttpContext.GetUserId()
             };
 
             var result = await _mediator.Send(command);
