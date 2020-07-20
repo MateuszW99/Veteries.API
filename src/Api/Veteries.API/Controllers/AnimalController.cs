@@ -1,12 +1,10 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Animal.Models.Commands;
 using Animal.Models.Results;
 using Extensions;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity.UI.V3.Pages.Internal.Account.Manage;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Veteries.API.Controllers
@@ -42,14 +40,25 @@ namespace Veteries.API.Controllers
                 return BadRequest(result.Message);
             }
 
-            return Ok(result.Animal);
+            return Ok(result.Message);
         }
 
         [HttpGet]
         [Route("animals")]
         public async Task<IActionResult> GetAllAnimals()
         {
+            var command = new GetAllAnimalsCommand()
+            {
+                UserId = HttpContext.GetUserId()
+            };
+
             var result = await _mediator.Send(new GetAllAnimalsCommand());
+
+            if (!result.Success)
+            {
+                return BadRequest(result.Message);
+            }
+
             return Ok(result.Animals);
         }
 
@@ -57,7 +66,11 @@ namespace Veteries.API.Controllers
         [Route("animals/{id}")]
         public async Task<IActionResult> GetAnimalById(int id)
         {
-            var command = new GetAnimalByIdCommand() {Id = id};
+            var command = new GetAnimalByIdCommand()
+            {
+                Id = id,
+                UserId = HttpContext.GetUserId()
+            };
 
             GetAnimalResult result = await _mediator.Send(command);
 
@@ -109,7 +122,7 @@ namespace Veteries.API.Controllers
                 return BadRequest(result.Message);
             }
 
-            return Ok(result.Animal);
+            return Ok(result.Message);
         }
 
     }
