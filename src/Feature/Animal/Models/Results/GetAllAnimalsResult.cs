@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Models;
 
 namespace Animal.Models.Results
 {
@@ -13,12 +14,20 @@ namespace Animal.Models.Results
             return new GetAllAnimalsResult()
             {
                 Success = false,
-                Message = new string("No animal found"),
-                Animals = null
+                Message = ResultMessages.DatabaseEmpty
             };
         }
 
-        public static GetAllAnimalsResult AnimalListResult(IEnumerable<Domain.Entities.Animal> animals)
+        public static GetAllAnimalsResult AccessDeniedResult()
+        {
+            return new GetAllAnimalsResult()
+            {
+                Success = false,
+                Message = ResultMessages.AccessDenied
+            };
+        }
+
+        public static GetAllAnimalsResult SuccessfulResult(IEnumerable<Domain.Entities.Animal> animals)
         {
             return new GetAllAnimalsResult()
             {

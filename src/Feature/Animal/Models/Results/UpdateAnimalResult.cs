@@ -1,8 +1,9 @@
 ﻿using Domain.Entities;
+using Models;
 
 namespace Animal.Models.Results
 {
-    public class UpdateAnimalResult : AnimalResult
+    public class UpdateAnimalResult : IAnimalResult
     {
         public bool Success { get; set; }
         public string Message { get; set; }
@@ -14,8 +15,7 @@ namespace Animal.Models.Results
             return new UpdateAnimalResult()
             {
                 Success = false,
-                Message = new string("Empty request"),
-                Animal = null
+                Message = ResultMessages.EmptyRequest
             };
             
         }
@@ -25,17 +25,16 @@ namespace Animal.Models.Results
             return new UpdateAnimalResult()
             {
                 Success = false,
-                Message = new string($"Error when updating animal"),
-                Animal = null
+                Message = ResultMessages.BadRequest
             };
         }
 
-        public new static UpdateAnimalResult SuccessfulResult()
+        public static UpdateAnimalResult SuccessfulResult()
         {
             return new UpdateAnimalResult()
             {
                 Success = true,
-                Message = new string("Successfully updated animal")
+                Message = ResultMessages.UpdateSuccessful
             };
         }
 
@@ -44,7 +43,7 @@ namespace Animal.Models.Results
             return new UpdateAnimalResult()
             {
                 Success = false,
-                Message = new string("You can't update this animal data")
+                Message = ResultMessages.AccessDenied
             };
         }
     }

@@ -1,4 +1,6 @@
-﻿namespace Animal.Models.Results
+﻿using Models;
+
+namespace Animal.Models.Results
 {
     public class CreateAnimalResult : IAnimalResult
     {
@@ -11,8 +13,7 @@
             return new CreateAnimalResult()
             {
                 Success = false,
-                Message = new string("Empty request"),
-                Animal = null
+                Message = ResultMessages.BadRequest
             };
         }
 
@@ -21,7 +22,7 @@
             return new CreateAnimalResult
             {
                 Success = true,
-                Message = new string("Successfully added a new animal"),
+                Message = ResultMessages.CreationSuccessful,
                 Animal = animal
             };
         }

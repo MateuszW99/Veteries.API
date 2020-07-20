@@ -1,4 +1,6 @@
-﻿namespace Animal.Models.Results
+﻿using Models;
+
+namespace Animal.Models.Results
 {
     public class GetAnimalResult : IAnimalResult
     {
@@ -11,8 +13,7 @@
             return new GetAnimalResult()
             {
                 Success = false,
-                Message = new string("Request empty"),
-                Animal = null
+                Message = ResultMessages.BadRequest
             };
         }
 
@@ -21,8 +22,7 @@
             return new GetAnimalResult()
             {
                 Success = false,
-                Message = new string($"Error when deleting animal with id: {id}"),
-                Animal = null
+                Message = ResultMessages.AnimalNotFound
             };
         }
 
@@ -32,6 +32,15 @@
             {
                 Success = true,
                 Animal = animal
+            };
+        }
+
+        public static GetAnimalResult AccessDeniedResult()
+        {
+            return new GetAnimalResult()
+            {
+                Success = true,
+                Message = ResultMessages.AccessDenied
             };
         }
     }
