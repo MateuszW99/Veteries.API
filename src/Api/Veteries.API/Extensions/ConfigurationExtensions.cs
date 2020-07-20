@@ -11,7 +11,6 @@ using Persistence.Domain;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
-using FluentValidation.AspNetCore;
 
 namespace Veteries.API.Extensions
 {
@@ -68,8 +67,8 @@ namespace Veteries.API.Extensions
                 o.Password.RequireUppercase = false;
                 o.Password.RequireNonAlphanumeric = false;
             }).AddRoles<IdentityRole>()
-            .AddEntityFrameworkStores<DomainDbContext>()
-            .AddDefaultTokenProviders();
+                .AddEntityFrameworkStores<DomainDbContext>()
+                .AddDefaultTokenProviders();
         }
 
 
@@ -91,16 +90,16 @@ namespace Veteries.API.Extensions
 
             services.AddSingleton(tokenValidationParameters);
 
-            services.AddAuthentication(options =>
+            services.AddAuthentication(x =>
             {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             })
-            .AddJwtBearer(options =>
+            .AddJwtBearer(x =>
             {
-                options.SaveToken = true;
-                options.TokenValidationParameters = tokenValidationParameters;
+                x.SaveToken = true;
+                x.TokenValidationParameters = tokenValidationParameters;
             });
         }
 

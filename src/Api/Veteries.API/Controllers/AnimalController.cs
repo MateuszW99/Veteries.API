@@ -1,11 +1,15 @@
 ﻿using System.Threading.Tasks;
 using Animal.Models.Commands;
 using Animal.Models.Results;
+using Extensions;
 using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Veteries.API.Controllers
 {
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Route("api/[controller]")]
     [ApiController]
     public class AnimalController : ControllerBase
@@ -18,9 +22,17 @@ namespace Veteries.API.Controllers
         }
 
         [HttpPost]
-        [Route("animal")]
-        public async Task<IActionResult> Animal([FromBody] CreateAnimalCommand command)
+        [Route("animals")]
+        public async Task<IActionResult> CreateAnimal(string name, int age, string species)
         {
+            var command = new CreateAnimalCommand()
+            {
+                Name = name,
+                Age = age,
+                Species = species,
+                UserId = HttpContext.GetUserId()
+            };
+
             var result = await _mediator.Send(command);
 
             if (!result.Success)
@@ -28,22 +40,37 @@ namespace Veteries.API.Controllers
                 return BadRequest(result.Message);
             }
 
-            return Ok(result.Animal);
+            return Ok(result.Message);
         }
 
         [HttpGet]
         [Route("animals")]
         public async Task<IActionResult> GetAllAnimals()
         {
+            var command = new GetAllAnimalsCommand()
+            {
+                UserId = HttpContext.GetUserId()
+            };
+
             var result = await _mediator.Send(new GetAllAnimalsCommand());
+
+            if (!result.Success)
+            {
+                return BadRequest(result.Message);
+            }
+
             return Ok(result.Animals);
         }
 
         [HttpGet]
-        [Route("animal/{id}")]
+        [Route("animals/{id}")]
         public async Task<IActionResult> GetAnimalById(int id)
         {
-            var command = new GetAnimalByIdCommand() {Id = id};
+            var command = new GetAnimalByIdCommand()
+            {
+                Id = id,
+                UserId = HttpContext.GetUserId()
+            };
 
             GetAnimalResult result = await _mediator.Send(command);
 
@@ -56,10 +83,14 @@ namespace Veteries.API.Controllers
         }
 
         [HttpDelete]
-        [Route("animal/{id}")]
+        [Route("animals/{id}")]
         public async Task<IActionResult> DeleteAnimalById(int id)
         {
-            var command = new DeleteAnimalCommand() { Id = id };
+            var command = new DeleteAnimalCommand()
+            {
+                Id = id,
+                UserId = HttpContext.GetUserId()
+            };
 
             DeleteAnimalResult result = await _mediator.Send(command);
 
@@ -72,10 +103,17 @@ namespace Veteries.API.Controllers
         }
 
         [HttpPost]
-        [Route("animal/{id}")]
-        public async Task<IActionResult> UpdateAnimal(int id, string name, int? age, string species)
+        [Route("animals/{id}")]
+        public async Task<IActionResult> UpdateAnimal(int id, string name, int age, string species)
         {
-            var command = new UpdateAnimalCommand() { Id = id, Name = name, Age = age.Value, Species = species };
+            var command = new UpdateAnimalCommand()
+            {
+                Id = id, 
+                Name = name, 
+                Age = age, 
+                Species = species,
+                UserId = HttpContext.GetUserId()
+            };
 
             UpdateAnimalResult result = await _mediator.Send(command);
 
@@ -84,7 +122,7 @@ namespace Veteries.API.Controllers
                 return BadRequest(result.Message);
             }
 
-            return Ok(result.Animal);
+            return Ok(result.Message);
         }
 
     }

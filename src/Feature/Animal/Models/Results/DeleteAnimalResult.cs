@@ -1,4 +1,6 @@
-﻿namespace Animal.Models.Results
+﻿using Models;
+
+namespace Animal.Models.Results
 {
     public class DeleteAnimalResult : IAnimalResult
     {
@@ -11,7 +13,7 @@
             return new DeleteAnimalResult()
             {
                 Success = false,
-                Message = new string("Request empty")
+                Message = ResultMessages.EmptyRequest
             };
         }
 
@@ -20,7 +22,7 @@
             return new DeleteAnimalResult()
             {
                 Success = false,
-                Message = new string($"Error when deleting animal with id: {id}")
+                Message = ResultMessages.BadRequest
             };
         }
 
@@ -29,7 +31,16 @@
             return new DeleteAnimalResult()
             {
                 Success = true,
-                Message = new string($"Deleted animal with id: {id}")
+                Message = ResultMessages.DeletionSuccessful
+            };
+        }
+
+        public static DeleteAnimalResult AccessDeniedResult()
+        {
+            return new DeleteAnimalResult()
+            {
+                Success = false,
+                Message = ResultMessages.AccessDenied
             };
         }
     }

@@ -7,6 +7,10 @@
   <ItemGroup>
     <Compile Remove="Migrations\20200615133810_AddIdentityToToken.cs" />
     <Compile Remove="Migrations\20200615133810_AddIdentityToToken.Designer.cs" />
+    <Compile Remove="Migrations\20200708195746_UserClaimsMigration.cs" />
+    <Compile Remove="Migrations\20200708195746_UserClaimsMigration.Designer.cs" />
+    <Compile Remove="Migrations\20200719133254_xd.cs" />
+    <Compile Remove="Migrations\20200719133254_xd.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -15,6 +19,7 @@
     <PackageReference Include="FluentValidation" Version="8.6.2" />
     <PackageReference Include="FluentValidation.AspNetCore" Version="8.6.2" />
     <PackageReference Include="FluentValidation.WebApi" Version="8.6.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.2" />

@@ -33,9 +33,16 @@ namespace Animal.Handlers
                 return DeleteAnimalResult.RequestEmptyResult();
             }
 
-            var isDeleted = _animalService.DeleteAnimalAsync(request.Id);
+            var userCanUpdateAnimal = await _animalService.UserOwnsAnimalAsync(request.Id, request.UserId);
 
-            return !isDeleted.Result ? DeleteAnimalResult.BadRequestResult(request.Id) : DeleteAnimalResult.SuccessfulResult(request.Id);
+            if (!userCanUpdateAnimal)
+            {
+                return DeleteAnimalResult.AccessDeniedResult();
+            }
+
+            var isDeleted = await _animalService.DeleteAnimalAsync(request.Id);
+
+            return !isDeleted ? DeleteAnimalResult.BadRequestResult(request.Id) : DeleteAnimalResult.SuccessfulResult(request.Id);
         }
 
     }

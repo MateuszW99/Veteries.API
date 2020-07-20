@@ -3,10 +3,10 @@ using System.Threading.Tasks;
 using Animal.Abstractions;
 using Animal.Models.Commands;
 using Animal.Models.Results;
+using Extensions;
 using FluentValidation;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
-using Persistence.Domain;
+using Microsoft.AspNetCore.Http;
 
 namespace Animal.Handlers
 {
@@ -32,12 +32,10 @@ namespace Animal.Handlers
             }
         }
 
-        private readonly DomainDbContext _context;
         private readonly IAnimalService _animalService;
 
-        public UpdateAnimalHandler(DomainDbContext context, IAnimalService animalService)
+        public UpdateAnimalHandler(IAnimalService animalService)
         {
-            _context = context;
             _animalService = animalService;
         }
 
@@ -49,14 +47,16 @@ namespace Animal.Handlers
                 return UpdateAnimalResult.RequestEmptyResult();
             }
 
-            var updated = await _animalService.UpdateAnimalAsync(request);
+            var userCanUpdateAnimal = await _animalService.UserOwnsAnimalAsync(request.Id, request.UserId);
 
-            if (!updated)
+            if (!userCanUpdateAnimal)
             {
-                return UpdateAnimalResult.BadRequestResult();
+                return UpdateAnimalResult.AccessDeniedResult();
             }
 
-            return UpdateAnimalResult.SuccessfulResult();
+            var updated = await _animalService.UpdateAnimalAsync(request);
+            
+            return !updated ? UpdateAnimalResult.BadRequestResult() : UpdateAnimalResult.SuccessfulResult();
         }
 
 

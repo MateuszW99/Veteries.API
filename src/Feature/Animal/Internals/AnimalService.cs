@@ -1,34 +1,30 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Animal.Abstractions;
 using Animal.Models.Commands;
+using Extensions;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Persistence.Domain;
+using Animal = Domain.Entities.Animal;
 
 namespace Animal.Internals
 {
     public class AnimalService : IAnimalService
     {
         private readonly DomainDbContext _context;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public AnimalService(DomainDbContext context)
+        public AnimalService(DomainDbContext context, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public bool IsAnimalNull(Domain.Entities.Animal animal)
         {
             return animal == null ? true : false;
-        }
-
-        public Domain.Entities.Animal CreateMockPet(string name, int age, string species)
-        {
-            return new Domain.Entities.Animal()
-            {
-                Name = name,
-                Age = age,
-                Species = species
-            };
         }
 
         public async Task<Domain.Entities.Animal> ReadAnimalAsync(int animalId)
@@ -40,22 +36,29 @@ namespace Animal.Internals
 
         public async Task<bool> UpdateAnimalAsync(UpdateAnimalCommand request)
         {
-            var animalToUpdate = await _context.Animals.FirstOrDefaultAsync(x => x.Id == request.Id);
+            try
+            {
+                var animalToUpdate = await _context.Animals.FirstOrDefaultAsync(x => x.Id == request.Id);
 
-            if (IsAnimalNull(animalToUpdate))
+                if (IsAnimalNull(animalToUpdate))
+                {
+                    return false;
+                }
+
+                UpdateAnimalCredentials(request, animalToUpdate);
+
+                _context.Animals.Update(animalToUpdate);
+                await _context.SaveChangesAsync();
+
+                return true;
+            }
+            catch
             {
                 return false;
             }
-
-            UpdateAnimalCredentials(request, animalToUpdate);
-
-            _context.Animals.Update(animalToUpdate);
-            await _context.SaveChangesAsync();
-
-            return true;
         }
 
-        private void UpdateAnimalCredentials(UpdateAnimalCommand request, Domain.Entities.Animal animalToUpdate)
+        private static void UpdateAnimalCredentials(UpdateAnimalCommand request, Domain.Entities.Animal animalToUpdate)
         {
             animalToUpdate.Name = request.Name ?? animalToUpdate.Name;
             animalToUpdate.Species = request.Name ?? animalToUpdate.Species;
@@ -84,19 +87,46 @@ namespace Animal.Internals
             return animals;
         }
 
+
+
         public async Task<Domain.Entities.Animal> CreateAnimalAsync(CreateAnimalCommand request)
         {
-            var AnimalToCreate = new Domain.Entities.Animal()
+            var animalToCreate = new Domain.Entities.Animal()
             {
                 Name = request.Name,
                 Age = request.Age,
-                Species = request.Species
+                Species = request.Species,
+                UserId = request.UserId
             };
 
-            await _context.Animals.AddAsync(AnimalToCreate);
+            await _context.Animals.AddAsync(animalToCreate);
             await _context.SaveChangesAsync();
 
-            return AnimalToCreate;
+            return animalToCreate;
+        }
+
+        public async Task<bool> UserOwnsAnimalAsync(int animalId, string userId)
+        {
+            try
+            {
+                var animal = await _context.Animals.FirstOrDefaultAsync(x => x.Id == animalId);
+
+                if (animal == null)
+                {
+                    return false;
+                }
+
+                if (animal.UserId != userId)
+                {
+                    return false;
+                }
+
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
     }
 }
