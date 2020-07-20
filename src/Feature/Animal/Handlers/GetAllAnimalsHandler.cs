@@ -26,7 +26,7 @@ namespace Animal.Handlers
                 return GetAllAnimalsResult.NoAnimalFoundResult();
             }
 
-            return GetAllAnimalsResult.AnimalListResult(animals);
+            return GetAllAnimalsResult.SuccessfulResult(animals);
         }
     }
 }

@@ -36,6 +36,11 @@ namespace Animal.Handlers
 
             var animal = await _animalService.ReadAnimalAsync(request.Id);
 
+            if (request.UserId != animal.UserId)
+            {
+                return GetAnimalResult.AccessDeniedResult();
+            }
+
             if (_animalService.IsAnimalNull(animal))
             {
                 return GetAnimalResult.AnimalNotFoundResult(request.Id);
