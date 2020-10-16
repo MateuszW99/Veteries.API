@@ -158,7 +158,7 @@ namespace User.Internals
                 new Claim(JwtRegisteredClaimNames.Sub, user.Email),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
-                new Claim("id", user.Id)
+                new Claim(ClaimTypes.NameIdentifier, user.Id)
             };
 
             var userClaims = await _userManager.GetClaimsAsync(user);
