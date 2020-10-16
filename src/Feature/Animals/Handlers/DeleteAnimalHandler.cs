@@ -33,9 +33,9 @@ namespace Animal.Handlers
                 return DeleteAnimalResult.RequestEmptyResult();
             }
 
-            var userCanUpdateAnimal = await _animalService.UserOwnsAnimalAsync(request.Id, request.UserId);
+            var userCanDeleteAnimal = await _animalService.UserOwnsAnimalAsync(request.Id, request.UserId);
 
-            if (!userCanUpdateAnimal)
+            if (!userCanDeleteAnimal)
             {
                 return DeleteAnimalResult.AccessDeniedResult();
             }
