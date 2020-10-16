@@ -19,7 +19,7 @@ namespace Animals.Handlers
 
         public async Task<GetAllAnimalsResult> Handle(GetAllAnimalsCommand request, CancellationToken cancellationToken)
         {
-            var animals = await _animalService.ReadAllAnimals();
+            var animals = await _animalService.GetAnimalsAsync();
 
             if (!animals.Any())
             {

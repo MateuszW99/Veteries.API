@@ -34,14 +34,5 @@ namespace Animals.Models.Results
                 Animal = animal
             };
         }
-
-        public static GetAnimalResult AccessDeniedResult()
-        {
-            return new GetAnimalResult()
-            {
-                Success = true,
-                Message = ResultMessages.AccessDenied
-            };
-        }
     }
 }

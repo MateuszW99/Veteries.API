@@ -3,31 +3,42 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Animals.Abstractions;
 using Animals.Models.Commands;
-using Microsoft.AspNetCore.Http;
+using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Persistence.Domain;
+using Services.Abstractions;
 
 namespace Animals.Internals
 {
     public class AnimalService : IAnimalService
     {
         private readonly DomainDbContext _context;
-        private readonly IHttpContextAccessor _httpContextAccessor;
-
-        public AnimalService(DomainDbContext context, IHttpContextAccessor httpContextAccessor)
+        private readonly IHttpService _httpService;
+        
+        public AnimalService(DomainDbContext context, IHttpService httpService)
         {
             _context = context;
-            _httpContextAccessor = httpContextAccessor;
+            _httpService = httpService;
         }
 
-        public bool IsAnimalNull(Domain.Entities.Animal animal)
+        public bool IsAnimalNull(Animal animal)
         {
             return animal == null ? true : false;
         }
 
-        public async Task<Domain.Entities.Animal> ReadAnimalAsync(int animalId)
+        public async Task<Animal> GetAnimalAsync(int animalId)
         {
             var animal = await _context.Animals.FirstOrDefaultAsync(x => x.Id == animalId);
+
+            if (animal == null)
+            {
+                return null;
+            }
+
+            if (!await UserOwnsAnimalAsync(animal.Id))
+            {
+                return null;
+            }
 
             return animal;
         }
@@ -36,7 +47,7 @@ namespace Animals.Internals
         {
             try
             {
-                var animalToUpdate = await _context.Animals.FirstOrDefaultAsync(x => x.Id == request.Id);
+                var animalToUpdate = await _context.Animals.FirstOrDefaultAsync(x => x.Id == request.Animal.Id);
 
                 if (IsAnimalNull(animalToUpdate))
                 {
@@ -56,11 +67,11 @@ namespace Animals.Internals
             }
         }
 
-        private static void UpdateAnimalCredentials(UpdateAnimalCommand request, Domain.Entities.Animal animalToUpdate)
+        private static void UpdateAnimalCredentials(UpdateAnimalCommand request, Animal animalToUpdate)
         {
-            animalToUpdate.Name = request.Name ?? animalToUpdate.Name;
-            animalToUpdate.Species = request.Name ?? animalToUpdate.Species;
-            animalToUpdate.Age = request.Age >= 0 ? request.Age : animalToUpdate.Age;
+            animalToUpdate.Name = request.Animal.Name ?? animalToUpdate.Name;
+            animalToUpdate.Species = request.Animal.Species ?? animalToUpdate.Species;
+            animalToUpdate.Age = request.Animal.Age >= 0 ? request.Animal.Age : animalToUpdate.Age;
         }
 
         public async Task<bool> DeleteAnimalAsync(int animalId)
@@ -78,23 +89,26 @@ namespace Animals.Internals
             return true;
         }
 
-        public async Task<IEnumerable<Domain.Entities.Animal>> ReadAllAnimals()
+        public async Task<IEnumerable<Animal>> GetAnimalsAsync()
         {
-            var animals = await _context.Animals.ToListAsync();
-
-            return animals;
+            return await _context.Animals.ToListAsync();
         }
-
-
-
-        public async Task<Domain.Entities.Animal> CreateAnimalAsync(CreateAnimalCommand request)
+        
+        public async Task<Animal> CreateAnimalAsync(CreateAnimalCommand request)
         {
-            var animalToCreate = new Domain.Entities.Animal()
+            var userId = _httpService.GetUserId();
+
+            if (userId == string.Empty)
             {
-                Name = request.Name,
-                Age = request.Age,
-                Species = request.Species,
-                UserId = request.UserId
+                return null;
+            }
+            
+            var animalToCreate = new Animal()
+            {
+                Name = request.Animal.Name,
+                Age = request.Animal.Age,
+                Species = request.Animal.Species,
+                UserId = userId
             };
 
             await _context.Animals.AddAsync(animalToCreate);
@@ -103,28 +117,11 @@ namespace Animals.Internals
             return animalToCreate;
         }
 
-        public async Task<bool> UserOwnsAnimalAsync(int animalId, string userId)
+        public async Task<bool> UserOwnsAnimalAsync(int animalId)
         {
-            try
-            {
-                var animal = await _context.Animals.FirstOrDefaultAsync(x => x.Id == animalId);
-
-                if (animal == null)
-                {
-                    return false;
-                }
-
-                if (animal.UserId != userId)
-                {
-                    return false;
-                }
-
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
+            var userId = _httpService.GetUserId();
+            var animal = await _context.Animals.FirstOrDefaultAsync(x => x.Id == animalId);
+            return animal != null && userId != string.Empty && animal.UserId == userId;
         }
     }
 }

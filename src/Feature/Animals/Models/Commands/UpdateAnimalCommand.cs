@@ -1,13 +1,11 @@
 ﻿using Animals.Models.Results;
+using Domain.Entities;
 using MediatR;
 
 namespace Animals.Models.Commands
 {
     public class UpdateAnimalCommand : AnimalCommand, IRequest<UpdateAnimalResult>
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public int Age { get; set; }
-        public string Species { get; set; }
+        public Animal Animal { get; set; }
     }
 }

@@ -14,7 +14,7 @@ namespace Animals.Handlers
         {
             public Validator()
             {
-                this.RuleFor(x => x.Id)
+                this.RuleFor(x => x.AnimalId)
                     .GreaterThanOrEqualTo(0);
             }
         }
@@ -33,16 +33,16 @@ namespace Animals.Handlers
                 return DeleteAnimalResult.RequestEmptyResult();
             }
 
-            var userCanDeleteAnimal = await _animalService.UserOwnsAnimalAsync(request.Id, request.UserId);
+            var userCanDeleteAnimal = await _animalService.UserOwnsAnimalAsync(request.AnimalId);
 
             if (!userCanDeleteAnimal)
             {
                 return DeleteAnimalResult.AccessDeniedResult();
             }
 
-            var isDeleted = await _animalService.DeleteAnimalAsync(request.Id);
+            var isDeleted = await _animalService.DeleteAnimalAsync(request.AnimalId);
 
-            return !isDeleted ? DeleteAnimalResult.BadRequestResult(request.Id) : DeleteAnimalResult.SuccessfulResult(request.Id);
+            return !isDeleted ? DeleteAnimalResult.BadRequestResult(request.AnimalId) : DeleteAnimalResult.SuccessfulResult(request.AnimalId);
         }
 
     }

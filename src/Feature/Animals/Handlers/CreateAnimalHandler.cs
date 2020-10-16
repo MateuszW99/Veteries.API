@@ -5,7 +5,6 @@ using Animals.Models.Commands;
 using Animals.Models.Results;
 using FluentValidation;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 
 namespace Animals.Handlers
 {
@@ -15,16 +14,16 @@ namespace Animals.Handlers
         {
             public Validator()
             {
-                this.RuleFor(x => x.Name)
+                this.RuleFor(x => x.Animal.Name)
                     .NotNull()
                     .Length(2, 20);
 
-                this.RuleFor(x => x.Species)
+                this.RuleFor(x => x.Animal.Species)
                     .NotNull()
                     .Length(2, 20);
 
 
-                this.RuleFor(x => x.Age)
+                this.RuleFor(x => x.Animal.Age)
                     .GreaterThan(0);
             }
         }
