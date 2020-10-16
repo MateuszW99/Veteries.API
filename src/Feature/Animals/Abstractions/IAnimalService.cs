@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Animal.Models.Commands;
+using Animals.Models.Commands;
 
-namespace Animal.Abstractions
+namespace Animals.Abstractions
 {
     public interface IAnimalService
     {

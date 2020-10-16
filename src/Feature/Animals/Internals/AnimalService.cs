@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Animal.Abstractions;
-using Animal.Models.Commands;
-using Extensions;
+using Animals.Abstractions;
+using Animals.Models.Commands;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Persistence.Domain;
-using Animal = Domain.Entities.Animal;
 
-namespace Animal.Internals
+namespace Animals.Internals
 {
     public class AnimalService : IAnimalService
     {

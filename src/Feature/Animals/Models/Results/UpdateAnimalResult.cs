@@ -1,7 +1,7 @@
 ﻿using Domain.Entities;
 using Models;
 
-namespace Animal.Models.Results
+namespace Animals.Models.Results
 {
     public class UpdateAnimalResult : IAnimalResult
     {

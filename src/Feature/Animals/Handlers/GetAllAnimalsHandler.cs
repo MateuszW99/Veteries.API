@@ -1,12 +1,12 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using Animal.Abstractions;
-using Animal.Models.Commands;
-using Animal.Models.Results;
+using Animals.Abstractions;
+using Animals.Models.Commands;
+using Animals.Models.Results;
 using MediatR;
 using Microsoft.EntityFrameworkCore.Internal;
 
-namespace Animal.Handlers
+namespace Animals.Handlers
 {
     public class GetAllAnimalsHandler : IRequestHandler<GetAllAnimalsCommand, GetAllAnimalsResult>
     {

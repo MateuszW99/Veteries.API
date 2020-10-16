@@ -1,13 +1,13 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using Animal.Abstractions;
-using Animal.Models.Commands;
-using Animal.Models.Results;
+using Animals.Abstractions;
+using Animals.Models.Commands;
+using Animals.Models.Results;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 
-namespace Animal.Handlers
+namespace Animals.Handlers
 {
     public class CreateAnimalHandler : IRequestHandler<CreateAnimalCommand, CreateAnimalResult>
     {

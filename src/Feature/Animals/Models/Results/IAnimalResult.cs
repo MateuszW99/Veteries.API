@@ -1,4 +1,4 @@
-﻿namespace Animal.Models.Results
+﻿namespace Animals.Models.Results
 {
     public interface IAnimalResult
     { 

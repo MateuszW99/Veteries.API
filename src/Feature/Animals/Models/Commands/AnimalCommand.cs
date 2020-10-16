@@ -1,4 +1,4 @@
-﻿namespace Animal.Models.Commands
+﻿namespace Animals.Models.Commands
 {
     public abstract class AnimalCommand
     {

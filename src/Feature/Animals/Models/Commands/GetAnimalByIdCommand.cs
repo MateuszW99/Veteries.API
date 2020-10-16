@@ -1,7 +1,7 @@
-﻿using Animal.Models.Results;
+﻿using Animals.Models.Results;
 using MediatR;
 
-namespace Animal.Models.Commands
+namespace Animals.Models.Commands
 {
     public class GetAnimalByIdCommand : AnimalCommand, IRequest<GetAnimalResult>
     {

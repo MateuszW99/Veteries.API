@@ -1,11 +1,11 @@
 ﻿using Autofac;
 using MediatR;
 using System.Reflection;
-using Animal.Abstractions;
-using Animal.Internals;
+using Animals.Abstractions;
+using Animals.Internals;
 using FluentValidation;
 
-namespace Animal
+namespace Animals
 {
     public class DependencyInjection : Autofac.Module
     {
