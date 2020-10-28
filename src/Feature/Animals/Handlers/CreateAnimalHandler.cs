@@ -14,16 +14,16 @@ namespace Animals.Handlers
         {
             public Validator()
             {
-                this.RuleFor(x => x.Animal.Name)
+                this.RuleFor(x => x.Name)
                     .NotNull()
                     .Length(2, 20);
 
-                this.RuleFor(x => x.Animal.Species)
+                this.RuleFor(x => x.Species)
                     .NotNull()
                     .Length(2, 20);
 
 
-                this.RuleFor(x => x.Animal.Age)
+                this.RuleFor(x => x.Age)
                     .GreaterThan(0);
             }
         }

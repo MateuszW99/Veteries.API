@@ -23,11 +23,8 @@ namespace Veteries.API.Controllers
         }
 
         [HttpPost]
-        [Route("animals")]
-        public async Task<IActionResult> CreateAnimal([FromBody]Animal animal)
+        public async Task<IActionResult> CreateAnimal([FromBody] CreateAnimalCommand command)
         {
-            var command = new CreateAnimalCommand() { Animal = animal };
-
             var result = await _mediator.Send(command);
 
             if (!result.Success)
@@ -39,7 +36,6 @@ namespace Veteries.API.Controllers
         }
 
         [HttpGet]
-        [Route("animals")]
         public async Task<IActionResult> GetAllAnimals()
         {
             var result = await _mediator.Send(new GetAllAnimalsCommand());
@@ -52,8 +48,7 @@ namespace Veteries.API.Controllers
             return Ok(result.Animals);
         }
 
-        [HttpGet]
-        [Route("animals/{id}")]
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetAnimalById(int id)
         {
             var command = new GetAnimalByIdCommand()
@@ -71,8 +66,7 @@ namespace Veteries.API.Controllers
             return Ok(result.Animal);
         }
 
-        [HttpDelete]
-        [Route("animals/{id}")]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAnimalById(int id)
         {
             var command = new DeleteAnimalCommand()
@@ -90,8 +84,7 @@ namespace Veteries.API.Controllers
             return Ok(result.Message);
         }
 
-        [HttpPost]
-        [Route("animals/{id}")]
+        [HttpPost("{id}")]
         public async Task<IActionResult> UpdateAnimal([FromBody] Animal animal)
         {
             var command = new UpdateAnimalCommand() { Animal = animal };

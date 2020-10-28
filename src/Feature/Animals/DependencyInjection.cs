@@ -1,9 +1,9 @@
 ﻿using Autofac;
-using MediatR;
 using System.Reflection;
 using Animals.Abstractions;
 using Animals.Internals;
 using FluentValidation;
+using MediatR;
 
 namespace Animals
 {

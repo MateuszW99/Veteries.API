@@ -105,9 +105,9 @@ namespace Animals.Internals
             
             var animalToCreate = new Animal()
             {
-                Name = request.Animal.Name,
-                Age = request.Animal.Age,
-                Species = request.Animal.Species,
+                Name = request.Name,
+                Age = request.Age,
+                Species = request.Species,
                 UserId = userId
             };
 
