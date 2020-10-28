@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Models.Helpers;
+using Persistence.Domain;
 using Veteries.API.Extensions;
 
 namespace Veteries.API
@@ -43,12 +44,12 @@ namespace Veteries.API
             builder.RegisterModule(new Application.DependencyInjection());
             builder.RegisterModule(new Persistence.DependencyInjection());
             builder.RegisterModule(new User.DependencyInjection());
-            builder.RegisterModule(new Animals.DependencyInjection());
             builder.RegisterModule(new Services.DependencyInjection());
+            builder.RegisterModule(new Animals.DependencyInjection());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, DomainDbContext dbContext)
         {
             this.AutofacContainer = app.ApplicationServices.GetAutofacRoot();
 
@@ -56,6 +57,8 @@ namespace Veteries.API
             {
                 app.UseDeveloperExceptionPage();
             }
+            
+            dbContext.Database.EnsureCreated();
             
             app.UseHttpsRedirection();
             app.UseRouting();
