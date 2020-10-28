@@ -1,12 +1,12 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using Animal.Abstractions;
-using Animal.Models.Commands;
-using Animal.Models.Results;
+using Animals.Abstractions;
+using Animals.Models.Commands;
+using Animals.Models.Results;
 using FluentValidation;
 using MediatR;
 
-namespace Animal.Handlers
+namespace Animals.Handlers
 {
     public class DeleteAnimalHandler : IRequestHandler<DeleteAnimalCommand, DeleteAnimalResult>
     {
@@ -14,7 +14,7 @@ namespace Animal.Handlers
         {
             public Validator()
             {
-                this.RuleFor(x => x.Id)
+                this.RuleFor(x => x.AnimalId)
                     .GreaterThanOrEqualTo(0);
             }
         }
@@ -33,16 +33,16 @@ namespace Animal.Handlers
                 return DeleteAnimalResult.RequestEmptyResult();
             }
 
-            var userCanUpdateAnimal = await _animalService.UserOwnsAnimalAsync(request.Id, request.UserId);
+            var userCanDeleteAnimal = await _animalService.UserOwnsAnimalAsync(request.AnimalId);
 
-            if (!userCanUpdateAnimal)
+            if (!userCanDeleteAnimal)
             {
                 return DeleteAnimalResult.AccessDeniedResult();
             }
 
-            var isDeleted = await _animalService.DeleteAnimalAsync(request.Id);
+            var isDeleted = await _animalService.DeleteAnimalAsync(request.AnimalId);
 
-            return !isDeleted ? DeleteAnimalResult.BadRequestResult(request.Id) : DeleteAnimalResult.SuccessfulResult(request.Id);
+            return !isDeleted ? DeleteAnimalResult.BadRequestResult(request.AnimalId) : DeleteAnimalResult.SuccessfulResult(request.AnimalId);
         }
 
     }

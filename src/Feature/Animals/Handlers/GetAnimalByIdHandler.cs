@@ -1,12 +1,12 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using Animal.Abstractions;
-using Animal.Models.Commands;
-using Animal.Models.Results;
+using Animals.Abstractions;
+using Animals.Models.Commands;
+using Animals.Models.Results;
 using FluentValidation;
 using MediatR;
 
-namespace Animal.Handlers
+namespace Animals.Handlers
 {
     public class GetAnimalByIdHandler : IRequestHandler<GetAnimalByIdCommand, GetAnimalResult>
     {
@@ -14,7 +14,7 @@ namespace Animal.Handlers
         {
             public Validator()
             {
-                this.RuleFor(x => x.Id)
+                this.RuleFor(x => x.AnimalId)
                     .NotNull()
                     .GreaterThanOrEqualTo(0);
             }
@@ -34,16 +34,11 @@ namespace Animal.Handlers
                 return GetAnimalResult.RequestEmptyResult();
             }
 
-            var animal = await _animalService.ReadAnimalAsync(request.Id);
-
-            if (request.UserId != animal.UserId)
-            {
-                return GetAnimalResult.AccessDeniedResult();
-            }
+            var animal = await _animalService.GetAnimalAsync(request.AnimalId);
 
             if (_animalService.IsAnimalNull(animal))
             {
-                return GetAnimalResult.AnimalNotFoundResult(request.Id);
+                return GetAnimalResult.AnimalNotFoundResult(request.AnimalId);
             }
 
             return GetAnimalResult.AnimalFoundResult(animal);

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Models;
 
-namespace Animal.Models.Results
+namespace Animals.Models.Results
 {
     public class GetAllAnimalsResult : IAnimalResult
     {

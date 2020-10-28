@@ -1,6 +1,6 @@
 ﻿using Models;
 
-namespace Animal.Models.Results
+namespace Animals.Models.Results
 {
     public class GetAnimalResult : IAnimalResult
     {
@@ -32,15 +32,6 @@ namespace Animal.Models.Results
             {
                 Success = true,
                 Animal = animal
-            };
-        }
-
-        public static GetAnimalResult AccessDeniedResult()
-        {
-            return new GetAnimalResult()
-            {
-                Success = true,
-                Message = ResultMessages.AccessDenied
             };
         }
     }

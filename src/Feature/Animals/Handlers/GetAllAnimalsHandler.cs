@@ -1,12 +1,12 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using Animal.Abstractions;
-using Animal.Models.Commands;
-using Animal.Models.Results;
+using Animals.Abstractions;
+using Animals.Models.Commands;
+using Animals.Models.Results;
 using MediatR;
 using Microsoft.EntityFrameworkCore.Internal;
 
-namespace Animal.Handlers
+namespace Animals.Handlers
 {
     public class GetAllAnimalsHandler : IRequestHandler<GetAllAnimalsCommand, GetAllAnimalsResult>
     {
@@ -19,7 +19,7 @@ namespace Animal.Handlers
 
         public async Task<GetAllAnimalsResult> Handle(GetAllAnimalsCommand request, CancellationToken cancellationToken)
         {
-            var animals = await _animalService.ReadAllAnimals();
+            var animals = await _animalService.GetAnimalsAsync();
 
             if (!animals.Any())
             {

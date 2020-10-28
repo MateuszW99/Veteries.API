@@ -1,14 +1,12 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using Animal.Abstractions;
-using Animal.Models.Commands;
-using Animal.Models.Results;
-using Extensions;
+using Animals.Abstractions;
+using Animals.Models.Commands;
+using Animals.Models.Results;
 using FluentValidation;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 
-namespace Animal.Handlers
+namespace Animals.Handlers
 {
     public class UpdateAnimalHandler : IRequestHandler<UpdateAnimalCommand, UpdateAnimalResult>
     {
@@ -16,17 +14,17 @@ namespace Animal.Handlers
         {
             public Validator()
             {
-                this.RuleFor(x => x.Id)
+                this.RuleFor(x => x.Animal.Id)
                     .GreaterThan(0);
 
-                this.RuleFor(x => x.Age)
+                this.RuleFor(x => x.Animal.Age)
                     .GreaterThan(0);
 
-                this.RuleFor(x => x.Species)
+                this.RuleFor(x => x.Animal.Species)
                     .NotNull()
                     .Length(2, 30);
 
-                this.RuleFor(x => x.Name)
+                this.RuleFor(x => x.Animal.Name)
                     .NotNull()
                     .Length(2, 30);
             }
@@ -47,9 +45,7 @@ namespace Animal.Handlers
                 return UpdateAnimalResult.RequestEmptyResult();
             }
 
-            var userCanUpdateAnimal = await _animalService.UserOwnsAnimalAsync(request.Id, request.UserId);
-
-            if (!userCanUpdateAnimal)
+            if (!await _animalService.UserOwnsAnimalAsync(request.Animal.Id))
             {
                 return UpdateAnimalResult.AccessDeniedResult();
             }
