@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using User.Commands;
+using User.Models.Commands;
 
 namespace Veteries.API.Controllers
 {
@@ -18,9 +18,10 @@ namespace Veteries.API.Controllers
 
         [HttpPost]
         [Route("register")]
-        public async Task<IActionResult> Register([FromBody] RegisterUser.Command command)
+        public async Task<IActionResult> Register([FromBody] RegisterUserCommand command)
         {
             var result = await _mediator.Send(command);
+
             if (!result.Success)
             {
                 return BadRequest(result);
@@ -31,9 +32,10 @@ namespace Veteries.API.Controllers
 
         [HttpPost]
         [Route("authenticate")]
-        public async Task<IActionResult> Authenticate([FromBody] AuthenticateUser.Command command)
+        public async Task<IActionResult> Authenticate([FromBody] AuthenticateUserCommand command)
         {
             var result = await _mediator.Send(command);
+
             if (!result.Success)
             {
                 return BadRequest(result);
@@ -44,9 +46,10 @@ namespace Veteries.API.Controllers
 
         [HttpPost]
         [Route("refresh")]
-        public async Task<IActionResult> Refresh([FromBody] RefreshToken.Command command)
+        public async Task<IActionResult> Refresh([FromBody] RefreshTokenCommand command)
         {
             var result = await _mediator.Send(command);
+
             if (!result.Success)
             {
                 return BadRequest(result);

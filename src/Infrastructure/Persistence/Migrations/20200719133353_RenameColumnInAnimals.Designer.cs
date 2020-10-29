@@ -10,8 +10,8 @@ using Persistence.Domain;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DomainDbContext))]
-    [Migration("20200615122016_UpdateTokenEntity")]
-    partial class UpdateTokenEntity
+    [Migration("20200719133353_RenameColumnInAnimals")]
+    partial class RenameColumnInAnimals
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -20,6 +20,39 @@ namespace Persistence.Migrations
                 .HasAnnotation("ProductVersion", "3.1.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("Domain.Entities.Animal", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("Age")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Species")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Animals");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Animal", b =>
+            {
+                b.HasOne("Domain.Entities.ApplicationUser", "User")
+                    .WithOne()
+                    .HasForeignKey("UserId");
+            });
 
             modelBuilder.Entity("Domain.Entities.ApplicationUser", b =>
                 {
@@ -99,14 +132,14 @@ namespace Persistence.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int>("AnimalId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("AnimalId")
-                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -142,35 +175,10 @@ namespace Persistence.Migrations
                     b.ToTable("Offices");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Animals", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("Age")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Species")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Animals");
-                });
-
             modelBuilder.Entity("Domain.Entities.RefreshToken", b =>
                 {
                     b.Property<string>("Token")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("CreationDate")
@@ -332,18 +340,20 @@ namespace Persistence.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Appointment", b =>
-                {
-                    b.HasOne("Domain.Entities.Animal", null)
-                        .WithMany("Appointments")
-                        .HasForeignKey("AnimalId");
-                });
-
             modelBuilder.Entity("Domain.Entities.Animal", b =>
                 {
                     b.HasOne("Domain.Entities.ApplicationUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Appointment", b =>
+                {
+                    b.HasOne("Domain.Entities.Animal", "Animal")
+                        .WithMany("Appointments")
+                        .HasForeignKey("AnimalId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Domain.Entities.RefreshToken", b =>

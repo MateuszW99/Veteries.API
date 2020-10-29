@@ -10,8 +10,8 @@ using Persistence.Domain;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DomainDbContext))]
-    [Migration("20200615122016_UpdateTokenEntity")]
-    partial class UpdateTokenEntity
+    [Migration("20200608191002_Add_Simple_Schema")]
+    partial class Add_Simple_Schema
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -168,33 +168,26 @@ namespace Persistence.Migrations
                     b.ToTable("Animals");
                 });
 
-            modelBuilder.Entity("Domain.Entities.RefreshToken", b =>
+            modelBuilder.Entity("Domain.Entities.Token", b =>
                 {
-                    b.Property<string>("Token")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTime>("CreationDate")
+                    b.Property<DateTime>("Expires")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("ExpiryDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("Invalidated")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("JwtId")
+                    b.Property<string>("RefreshToken")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("RemoteIpAddress")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("Used")
-                        .HasColumnType("bit");
-
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("Token");
+                    b.HasKey("Id");
 
                     b.HasIndex("UserId");
 
@@ -334,19 +327,19 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.Entities.Appointment", b =>
                 {
-                    b.HasOne("Domain.Entities.Animal", null)
+                    b.HasOne("Domain.Entities.Animals", null)
                         .WithMany("Appointments")
                         .HasForeignKey("AnimalId");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Animal", b =>
+            modelBuilder.Entity("Domain.Entities.Animals", b =>
                 {
                     b.HasOne("Domain.Entities.ApplicationUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
                 });
 
-            modelBuilder.Entity("Domain.Entities.RefreshToken", b =>
+            modelBuilder.Entity("Domain.Entities.Token", b =>
                 {
                     b.HasOne("Domain.Entities.ApplicationUser", "User")
                         .WithMany()
