@@ -27,5 +27,4 @@ namespace Animals.Models.Results
             };
         }
     }
-
 }

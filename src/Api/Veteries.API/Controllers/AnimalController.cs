@@ -2,7 +2,6 @@
 using Animals.Models.Commands;
 using Animals.Models.Results;
 using Domain.Entities;
-using Extensions;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -10,9 +9,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Veteries.API.Controllers
 {
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class AnimalController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -27,12 +26,7 @@ namespace Veteries.API.Controllers
         {
             var result = await _mediator.Send(command);
 
-            if (!result.Success)
-            {
-                return BadRequest(result.Message);
-            }
-
-            return Ok(result.Message);
+            return result.Success ? (IActionResult)Ok(result.Message) : BadRequest(result.Message);
         }
 
         [HttpGet]
@@ -40,63 +34,31 @@ namespace Veteries.API.Controllers
         {
             var result = await _mediator.Send(new GetAllAnimalsCommand());
 
-            if (!result.Success)
-            {
-                return BadRequest(result.Message);
-            }
-
-            return Ok(result.Animals);
+            return result.Success ? (IActionResult)Ok(result.Message) : BadRequest(result.Message);
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetAnimalById(int id)
+        public async Task<IActionResult> GetAnimalById([FromBody] GetAnimalByIdCommand command)
         {
-            var command = new GetAnimalByIdCommand()
-            {
-                AnimalId = id
-            };
-
             var result = await _mediator.Send(command);
 
-            if (!result.Success)
-            {
-                return BadRequest(result.Message);
-            }
-
-            return Ok(result.Animal);
+            return result.Success ? (IActionResult)Ok(result.Message) : BadRequest(result.Message);
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteAnimalById(int id)
+        public async Task<IActionResult> DeleteAnimalById([FromBody]DeleteAnimalCommand command)
         {
-            var command = new DeleteAnimalCommand()
-            {
-                AnimalId = id
-            };
+            var result = await _mediator.Send(command);
 
-            DeleteAnimalResult result = await _mediator.Send(command);
-
-            if (!result.Success)
-            {
-                return BadRequest(result.Message);
-            }
-
-            return Ok(result.Message);
+            return result.Success ? (IActionResult) Ok(result.Message) : BadRequest(result.Message);
         }
 
         [HttpPost("{id}")]
-        public async Task<IActionResult> UpdateAnimal([FromBody] Animal animal)
+        public async Task<IActionResult> UpdateAnimal([FromBody]UpdateAnimalCommand command)
         {
-            var command = new UpdateAnimalCommand() { Animal = animal };
-
             var result = await _mediator.Send(command);
 
-            if (!result.Success)
-            {
-                return BadRequest(result.Message);
-            }
-
-            return Ok(result.Message);
+            return result.Success ? (IActionResult)Ok(result.Message) : BadRequest(result.Message);
         }
 
     }

@@ -36,12 +36,7 @@ namespace Animals.Handlers
 
             var animal = await _animalService.GetAnimalAsync(request.AnimalId);
 
-            if (_animalService.IsAnimalNull(animal))
-            {
-                return GetAnimalResult.AnimalNotFoundResult(request.AnimalId);
-            }
-
-            return GetAnimalResult.AnimalFoundResult(animal);
+            return animal == null ? GetAnimalResult.AnimalNotFoundResult(request.AnimalId) : GetAnimalResult.AnimalFoundResult(animal);
         }
     }
 }

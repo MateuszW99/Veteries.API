@@ -14,17 +14,17 @@ namespace Animals.Handlers
         {
             public Validator()
             {
-                this.RuleFor(x => x.Animal.Id)
+                this.RuleFor(x => x.Id)
                     .GreaterThan(0);
 
-                this.RuleFor(x => x.Animal.Age)
+                this.RuleFor(x => x.Age)
                     .GreaterThan(0);
 
-                this.RuleFor(x => x.Animal.Species)
+                this.RuleFor(x => x.Species)
                     .NotNull()
                     .Length(2, 30);
 
-                this.RuleFor(x => x.Animal.Name)
+                this.RuleFor(x => x.Name)
                     .NotNull()
                     .Length(2, 30);
             }
@@ -45,7 +45,7 @@ namespace Animals.Handlers
                 return UpdateAnimalResult.RequestEmptyResult();
             }
 
-            if (!await _animalService.UserOwnsAnimalAsync(request.Animal.Id))
+            if (!await _animalService.UserOwnsAnimalAsync(request.Id))
             {
                 return UpdateAnimalResult.AccessDeniedResult();
             }

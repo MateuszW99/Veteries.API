@@ -21,21 +21,11 @@ namespace Animals.Internals
             _httpService = httpService;
         }
 
-        public bool IsAnimalNull(Animal animal)
-        {
-            return animal == null ? true : false;
-        }
-
         public async Task<Animal> GetAnimalAsync(int animalId)
         {
             var animal = await _context.Animals.FirstOrDefaultAsync(x => x.Id == animalId);
 
-            if (animal == null)
-            {
-                return null;
-            }
-
-            if (!await UserOwnsAnimalAsync(animal.Id))
+            if (animal == null || !await UserOwnsAnimalAsync(animal.Id))
             {
                 return null;
             }
@@ -47,9 +37,9 @@ namespace Animals.Internals
         {
             try
             {
-                var animalToUpdate = await _context.Animals.FirstOrDefaultAsync(x => x.Id == request.Animal.Id);
+                var animalToUpdate = await _context.Animals.FirstOrDefaultAsync(x => x.Id == request.Id);
 
-                if (IsAnimalNull(animalToUpdate))
+                if (animalToUpdate == null)
                 {
                     return false;
                 }
@@ -69,16 +59,16 @@ namespace Animals.Internals
 
         private static void UpdateAnimalCredentials(UpdateAnimalCommand request, Animal animalToUpdate)
         {
-            animalToUpdate.Name = request.Animal.Name ?? animalToUpdate.Name;
-            animalToUpdate.Species = request.Animal.Species ?? animalToUpdate.Species;
-            animalToUpdate.Age = request.Animal.Age >= 0 ? request.Animal.Age : animalToUpdate.Age;
+            animalToUpdate.Name = request.Name ?? animalToUpdate.Name;
+            animalToUpdate.Species = request.Species ?? animalToUpdate.Species;
+            animalToUpdate.Age = request.Age >= 0 ? request.Age : animalToUpdate.Age;
         }
 
         public async Task<bool> DeleteAnimalAsync(int animalId)
         {
             var animalToDelete = await _context.Animals.FirstOrDefaultAsync(x => x.Id == animalId);
 
-            if (IsAnimalNull(animalToDelete))
+            if (animalToDelete == null)
             {
                 return false;
             }

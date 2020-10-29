@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Security.Claims;
+﻿using System.Linq;
 using Services.Abstractions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.IdentityModel.JsonWebTokens;
@@ -18,20 +16,13 @@ namespace Services.Externals
 
         public string GetUserId()
         {
-            try
-            {
-                if (_httpContextAccessor?.HttpContext.User == null)
-                {
-                    return string.Empty;
-                }
-
-                return _httpContextAccessor.HttpContext.User.Claims
-                    .Single(x => x.Type == JwtRegisteredClaimNames.NameId).Value;
-            }
-            catch (Exception e)
+            if (_httpContextAccessor?.HttpContext.User == null)
             {
                 return string.Empty;
             }
+
+            return _httpContextAccessor.HttpContext.User.Claims
+                .Single(x => x.Type == JwtRegisteredClaimNames.NameId).Value;
         }
     }
 }
