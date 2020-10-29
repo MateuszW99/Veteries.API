@@ -1,11 +1,11 @@
 using Autofac;
+using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Models.Helpers;
 using Persistence.Domain;
 using Veteries.API.Extensions;
@@ -22,11 +22,10 @@ namespace Veteries.API
         {
             Configuration = configuration;
         }
-        
+
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
             var appSettingsSection = Configuration.GetSection("AppSettings");
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.Configure<AppSettings>(appSettingsSection);
@@ -39,7 +38,7 @@ namespace Veteries.API
             services.AddHttpContextAccessor();
             services.AddMvc();
         }
-        
+
         public void ConfigureContainer(ContainerBuilder builder)
         {
             builder.RegisterModule(new Application.DependencyInjection());
@@ -52,23 +51,25 @@ namespace Veteries.API
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, DomainDbContext dbContext)
         {
+            this.AutofacContainer = app.ApplicationServices.GetAutofacRoot();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
-            
+
             dbContext.Database.EnsureCreated();
-            
+
             app.UseHttpsRedirection();
-
             app.UseRouting();
-
             app.UseAuthorization();
-
+            app.UseAuthentication();
+            app.UseCors("default");
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
+            app.UseVeteriesSwagger(Configuration);
         }
     }
 }

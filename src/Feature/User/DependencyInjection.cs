@@ -3,7 +3,6 @@ using FluentValidation;
 using MediatR;
 using System.Reflection;
 using User.Abstractions;
-using User.Abstractions.Internals;
 using User.Internals;
 
 namespace User
