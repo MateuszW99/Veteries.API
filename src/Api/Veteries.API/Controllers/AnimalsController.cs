@@ -12,17 +12,17 @@ namespace Veteries.API.Controllers
     [ApiController]
     [Route("api/[controller]")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    public class AnimalController : ControllerBase
+    public class AnimalsController : ControllerBase
     {
         private readonly IMediator _mediator;
 
-        public AnimalController(IMediator mediator)
+        public AnimalsController(IMediator mediator)
         {
             _mediator = mediator;
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateAnimal([FromBody] CreateAnimalCommand command)
+        public async Task<IActionResult> Create([FromBody] CreateAnimalCommand command)
         {
             var result = await _mediator.Send(command);
 
@@ -30,15 +30,15 @@ namespace Veteries.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllAnimals()
+        public async Task<IActionResult> GetAll()
         {
             var result = await _mediator.Send(new GetAllAnimalsCommand());
 
-            return result.Success ? (IActionResult)Ok(result.Message) : BadRequest(result.Message);
+            return Ok(result.Animals);
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetAnimalById([FromBody] GetAnimalByIdCommand command)
+        public async Task<IActionResult> GetById([FromBody] GetAnimalByIdCommand command)
         {
             var result = await _mediator.Send(command);
 
@@ -46,7 +46,7 @@ namespace Veteries.API.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteAnimalById([FromBody]DeleteAnimalCommand command)
+        public async Task<IActionResult> DeleteById([FromBody]DeleteAnimalCommand command)
         {
             var result = await _mediator.Send(command);
 
@@ -54,7 +54,7 @@ namespace Veteries.API.Controllers
         }
 
         [HttpPost("{id}")]
-        public async Task<IActionResult> UpdateAnimal([FromBody]UpdateAnimalCommand command)
+        public async Task<IActionResult> Update([FromBody]UpdateAnimalCommand command)
         {
             var result = await _mediator.Send(command);
 

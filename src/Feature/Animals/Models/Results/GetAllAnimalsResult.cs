@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Domain.Entities;
 using Models;
 
 namespace Animals.Models.Results
@@ -13,6 +14,7 @@ namespace Animals.Models.Results
         {
             return new GetAllAnimalsResult()
             {
+                Animals = new List<Animal>(),
                 Success = false,
                 Message = ResultMessages.DatabaseEmpty
             };
