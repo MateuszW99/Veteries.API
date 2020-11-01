@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Security.Policy;
-using Microsoft.AspNetCore.Identity;
 
 namespace Domain.Entities
 {
@@ -12,7 +10,7 @@ namespace Domain.Entities
         public string Species { get; set; }
         public int Age { get; set; }
 
-        public ICollection<Appointment> Appointments { get; set; }
+        public List<Appointment> Appointments { get; set; }
 
         public string UserId { get; set; }
         [ForeignKey(nameof(UserId))]
