@@ -1,7 +1,5 @@
 ﻿using System.Threading.Tasks;
 using Animals.Models.Commands;
-using Animals.Models.Results;
-using Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -38,17 +36,17 @@ namespace Veteries.API.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetById([FromBody] GetAnimalByIdCommand command)
+        public async Task<IActionResult> GetById(int id)
         {
-            var result = await _mediator.Send(command);
+            var result = await _mediator.Send(new GetAnimalByIdCommand{AnimalId = id});
 
-            return result.Success ? (IActionResult)Ok(result.Message) : BadRequest(result.Message);
+            return result.Success ? (IActionResult)Ok(result.Animal) : BadRequest(result.Message);
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteById([FromBody]DeleteAnimalCommand command)
+        public async Task<IActionResult> DeleteById(int id)
         {
-            var result = await _mediator.Send(command);
+            var result = await _mediator.Send(new DeleteAnimalCommand{ AnimalId = id });
 
             return result.Success ? (IActionResult) Ok(result.Message) : BadRequest(result.Message);
         }
