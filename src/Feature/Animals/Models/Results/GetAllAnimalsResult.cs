@@ -1,35 +1,15 @@
 ﻿using System.Collections.Generic;
-using Domain.Entities;
-using Models;
+using Models.ResponseModels;
 
 namespace Animals.Models.Results
 {
     public class GetAllAnimalsResult : IAnimalResult
     {
-        public IEnumerable<Domain.Entities.Animal> Animals;
+        public IEnumerable<AnimalResponse> Animals { get; set; }
         public bool Success { get; set; }
         public string Message { get; set; }
 
-        public static GetAllAnimalsResult NoAnimalFoundResult()
-        {
-            return new GetAllAnimalsResult()
-            {
-                Animals = new List<Animal>(),
-                Success = false,
-                Message = ResultMessages.DatabaseEmpty
-            };
-        }
-
-        public static GetAllAnimalsResult AccessDeniedResult()
-        {
-            return new GetAllAnimalsResult()
-            {
-                Success = false,
-                Message = ResultMessages.AccessDenied
-            };
-        }
-
-        public static GetAllAnimalsResult SuccessfulResult(IEnumerable<Domain.Entities.Animal> animals)
+        public static GetAllAnimalsResult SuccessfulResult(IEnumerable<AnimalResponse> animals)
         {
             return new GetAllAnimalsResult()
             {

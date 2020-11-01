@@ -1,5 +1,4 @@
-﻿using Domain.Entities;
-using Models;
+﻿using Models;
 
 namespace Animals.Models.Results
 {
@@ -7,8 +6,6 @@ namespace Animals.Models.Results
     {
         public bool Success { get; set; }
         public string Message { get; set; }
-
-        public Domain.Entities.Animal Animal { get; set; }
 
         public static UpdateAnimalResult RequestEmptyResult()
         { 

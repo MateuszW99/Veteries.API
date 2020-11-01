@@ -3,8 +3,10 @@ using System.Threading.Tasks;
 using Animals.Abstractions;
 using Animals.Models.Commands;
 using Animals.Models.Results;
+using AutoMapper;
 using FluentValidation;
 using MediatR;
+using Models.ResponseModels;
 
 namespace Animals.Handlers
 {
@@ -21,10 +23,12 @@ namespace Animals.Handlers
         }
 
         private readonly IAnimalService _animalService;
+        private readonly IMapper _mapper;
 
-        public GetAnimalByIdHandler(IAnimalService animalService)
+        public GetAnimalByIdHandler(IAnimalService animalService, IMapper mapper)
         {
             _animalService = animalService;
+            _mapper = mapper;
         }
 
         public async Task<GetAnimalResult> Handle(GetAnimalByIdCommand request, CancellationToken cancellationToken)
@@ -36,7 +40,7 @@ namespace Animals.Handlers
 
             var animal = await _animalService.GetAnimalAsync(request.AnimalId);
 
-            return animal == null ? GetAnimalResult.AnimalNotFoundResult(request.AnimalId) : GetAnimalResult.AnimalFoundResult(animal);
+            return animal is null ? GetAnimalResult.AnimalNotFoundResult() : GetAnimalResult.AnimalFoundResult(_mapper.Map<AnimalResponse>(animal));
         }
     }
 }
