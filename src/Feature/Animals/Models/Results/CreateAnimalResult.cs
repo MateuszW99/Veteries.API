@@ -1,10 +1,11 @@
-﻿using Models;
+﻿using Domain.Entities;
+using Models;
 
 namespace Animals.Models.Results
 {
     public class CreateAnimalResult : IAnimalResult
     {
-        public Domain.Entities.Animal Animal { get; set; }
+        public Animal Animal { get; set; }
         public bool Success { get; set; }
         public string Message { get; set; }
 
@@ -17,7 +18,7 @@ namespace Animals.Models.Results
             };
         }
 
-        public static CreateAnimalResult SuccessfulResult(Domain.Entities.Animal animal)
+        public static CreateAnimalResult SuccessfulResult(Animal animal)
         {
             return new CreateAnimalResult
             {
