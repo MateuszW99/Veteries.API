@@ -1,5 +1,6 @@
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -35,7 +36,7 @@ namespace Veteries.API
             services.AddApiIdentity(Configuration);
             services.AddJwtAuthentication(Configuration);
             services.AddDatabaseContext(Configuration);
-            services.AddHttpContextAccessor();
+            services.AddAutoMapper(typeof(Startup));
             services.AddMvc();
         }
 

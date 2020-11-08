@@ -3,8 +3,10 @@ using System.Threading.Tasks;
 using Animals.Abstractions;
 using Animals.Models.Commands;
 using Animals.Models.Results;
+using AutoMapper;
 using FluentValidation;
 using MediatR;
+using Models.ResponseModels;
 
 namespace Animals.Handlers
 {
@@ -29,10 +31,12 @@ namespace Animals.Handlers
         }
 
         private readonly IAnimalService _service;
+        private readonly IMapper _mapper;
 
-        public CreateAnimalHandler(IAnimalService service)
+        public CreateAnimalHandler(IAnimalService service, IMapper mapper)
         {
             _service = service;
+            _mapper = mapper;
         }
 
 
@@ -43,9 +47,9 @@ namespace Animals.Handlers
                 return CreateAnimalResult.RequestEmptyResult();
             }
 
-            var createdAnimal = await _service.CreateAnimalAsync(request);
+            var animal = await _service.CreateAnimalAsync(request);
 
-            return CreateAnimalResult.SuccessfulResult(createdAnimal);
+            return CreateAnimalResult.SuccessfulResult(_mapper.Map<AnimalResponse>(animal));
         }
     }
 }

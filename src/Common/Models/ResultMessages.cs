@@ -10,6 +10,7 @@ namespace Models
         public const string EmptyRequest = "Empty request";
         public const string BadRequest = "Bad request";
         public const string DeletionSuccessful = "Successfully deleted";
+        public const string DeletionFailed = "Deletion failed";
         public const string UpdateSuccessful = "Successfully updated";
         public const string CreationSuccessful = "Successfully created";
         public const string DatabaseEmpty = "No animals in the database";

@@ -42,7 +42,7 @@ namespace Animals.Handlers
 
             var isDeleted = await _animalService.DeleteAnimalAsync(request.AnimalId);
 
-            return !isDeleted ? DeleteAnimalResult.BadRequestResult(request.AnimalId) : DeleteAnimalResult.SuccessfulResult(request.AnimalId);
+            return !isDeleted ? DeleteAnimalResult.BadRequestResult() : DeleteAnimalResult.SuccessfulResult();
         }
 
     }

@@ -17,16 +17,16 @@ namespace Animals.Models.Results
             };
         }
 
-        public static DeleteAnimalResult BadRequestResult(int id)
+        public static DeleteAnimalResult BadRequestResult()
         {
             return new DeleteAnimalResult()
             {
                 Success = false,
-                Message = ResultMessages.BadRequest
+                Message = ResultMessages.DeletionFailed
             };
         }
 
-        public static DeleteAnimalResult SuccessfulResult(int id)
+        public static DeleteAnimalResult SuccessfulResult()
         {
             return new DeleteAnimalResult()
             {

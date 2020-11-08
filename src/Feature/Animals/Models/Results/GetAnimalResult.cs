@@ -1,10 +1,11 @@
 ﻿using Models;
+using Models.ResponseModels;
 
 namespace Animals.Models.Results
 {
     public class GetAnimalResult : IAnimalResult
     {
-        public Domain.Entities.Animal Animal { get; set; }
+        public AnimalResponse Animal { get; set; }
         public bool Success { get; set; }
         public string Message { get; set; }
 
@@ -17,7 +18,7 @@ namespace Animals.Models.Results
             };
         }
 
-        public static GetAnimalResult AnimalNotFoundResult(int id)
+        public static GetAnimalResult AnimalNotFoundResult()
         {
             return new GetAnimalResult()
             {
@@ -26,7 +27,7 @@ namespace Animals.Models.Results
             };
         }
 
-        public static GetAnimalResult AnimalFoundResult(Domain.Entities.Animal animal)
+        public static GetAnimalResult AnimalFoundResult(AnimalResponse animal)
         {
             return new GetAnimalResult()
             {
