@@ -31,6 +31,7 @@
   </ItemGroup>
     
   <ItemGroup>
+    <ProjectReference Include="..\..\Common\Mapper\Mapper.csproj" />
     <ProjectReference Include="..\..\Common\Services\Services.csproj" />
     <ProjectReference Include="..\..\Core\Domain\Domain.csproj" />
     <ProjectReference Include="..\..\Feature\Animals\Animals.csproj" />

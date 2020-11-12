@@ -10,6 +10,7 @@ using Microsoft.Extensions.Hosting;
 using Models.Helpers;
 using Persistence.Domain;
 using Veteries.API.Extensions;
+using CustomMapper = Mapper;
 
 namespace Veteries.API
 {
@@ -44,6 +45,7 @@ namespace Veteries.API
         {
             builder.RegisterModule(new Application.DependencyInjection());
             builder.RegisterModule(new Persistence.DependencyInjection());
+            builder.RegisterModule(new CustomMapper.DependencyInjection());
             builder.RegisterModule(new User.DependencyInjection());
             builder.RegisterModule(new Services.DependencyInjection());
             builder.RegisterModule(new Animals.DependencyInjection());
