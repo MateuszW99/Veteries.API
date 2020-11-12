@@ -43,7 +43,7 @@ namespace User.Internals
         {
             var checkoutUserEmail = await _userManager.FindByEmailAsync(email);
 
-            // the user already exists
+            // user already exists
             if (checkoutUserEmail != null)
             {
                 return IdentityResult.UserAlreadyExistsResult();
