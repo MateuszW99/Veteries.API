@@ -2,7 +2,7 @@
 using Domain.Entities;
 using Models.ResponseModels;
 
-namespace Mapper.Profiles.DomainToResponse
+namespace Veteries.API.Profiles
 {
     public class AnimalProfile : Profile
     {

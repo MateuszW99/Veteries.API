@@ -1,3 +1,6 @@
+using System;
+using System.Linq;
+using System.Reflection;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using AutoMapper;
@@ -10,6 +13,7 @@ using Microsoft.Extensions.Hosting;
 using Models.Helpers;
 using Persistence.Domain;
 using Veteries.API.Extensions;
+using Veteries.API.Profiles;
 using CustomMapper = Mapper;
 
 namespace Veteries.API
@@ -37,7 +41,6 @@ namespace Veteries.API
             services.AddApiIdentity(Configuration);
             services.AddJwtAuthentication(Configuration);
             services.AddDatabaseContext(Configuration);
-            services.AddAutoMapper(typeof(Startup));
             services.AddMvc();
         }
 
@@ -45,7 +48,10 @@ namespace Veteries.API
         {
             builder.RegisterModule(new Application.DependencyInjection());
             builder.RegisterModule(new Persistence.DependencyInjection());
-            builder.RegisterModule(new CustomMapper.DependencyInjection());
+            builder.RegisterModule(new CustomMapper.DependencyInjection(
+                Assembly.GetExecutingAssembly().GetTypes()
+                    .Where(type => type.IsClass && !type.IsAbstract && type.IsSubclassOf(typeof(Profile)))
+                    .Select(x => x.GetTypeInfo().Assembly)));
             builder.RegisterModule(new User.DependencyInjection());
             builder.RegisterModule(new Services.DependencyInjection());
             builder.RegisterModule(new Animals.DependencyInjection());

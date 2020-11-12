@@ -11,6 +11,8 @@ using Persistence.Domain;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
+using AutoMapper;
+using AutoMapper.EquivalencyExpression;
 
 namespace Veteries.API.Extensions
 {

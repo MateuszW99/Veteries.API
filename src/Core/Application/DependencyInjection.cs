@@ -17,7 +17,7 @@ namespace Application
         {
             builder.RegisterAssemblyTypes(typeof(IMediator).GetTypeInfo().Assembly).AsImplementedInterfaces();
 
-            var mediatrOpenTpes = new[]
+            var mediatrOpenTypes = new[]
             {
                 typeof(IRequestHandler<,>)
             };
